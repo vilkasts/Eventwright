@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "open-meteo": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["node_modules/open-meteo-mcp-server/dist/index.js"]
+    }
+  }
+}
