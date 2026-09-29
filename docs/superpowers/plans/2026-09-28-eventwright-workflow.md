@@ -4,6 +4,8 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
+> **Продолжение работы:** состояние на 2026-09-29 и порядок оставшихся шагов — в `docs/superpowers/plans/2026-09-29-handoff.md`. Прочитать его первым.
+
 **Goal:** С нуля построить репозиторий **Eventwright**: агентный workflow для Claude Code, вызываемый командой `/plan-event <описание события>`. Workflow собирает и подтверждает требования, исследует погоду (Open-Meteo MCP), площадки, кейтеринг, развлечения и логистику (web search), сводит бюджет, проверяет всё quality gates с точечными повторами, получает детерминированно проверяемое одобрение человека и выдаёт `event-plan.html` + `event-plan.md`.
 
 **Architecture:** Hub-and-spoke. Координатор — slash-команда в главной сессии Claude Code, следует skill `workflow-orchestration`. Модель решает, **какие** subagents нужны: formalizer выводит из запроса строку `- Services:`, человек подтверждает требования, `wf plan` детерминированно применяет выбор. Следующий шаг вычисляет **код**: `nextAction()` по графу `src/config/dag.ts` и `runs/<runId>/workflow-state.json`. 10 subagents с одной ответственностью и одним артефактом каждый; 3 из них (catering, entertainment, logistics) необязательные. Независимые агенты запускаются параллельно (несколько вызовов Agent в одном сообщении), зависимые — последовательно. Состояние пишут только CLI (`npm run -s wf -- …`) и hooks. Одобрение фиксирует hook `UserPromptSubmit` по тексту, набранному человеком, и оно привязано к sha256 плана.
@@ -69,10 +71,10 @@
 - [x] 6 Skills (5 шт.)
 - [x] 7 Subagents (10 шт.)
 - [x] 8 Slash-команды координатора
-- [ ] 9 Smoke-проверка в живом Claude Code
+- [ ] 9 Smoke-проверка в живом Claude Code *(поля payload, guards, агенты и skills проверены 2026-09-29 — остались `/mcp`, `/hooks` и `/approve-event nope` человеком; см. 2026-09-29-handoff.md)*
 - [ ] 10 Сквозной отладочный прогон
 - [ ] 11 Демонстрационные run (4)
-- [ ] 12 CLAUDE.md (раздел workflow) и README.md
+- [ ] 12 CLAUDE.md (раздел workflow) и README.md *(написаны; осталось вписать runId демо-run в README)*
 - [ ] 13 Чистый checkout, DoD, push
 
 ## Где выполнять задачи: облако или локально
