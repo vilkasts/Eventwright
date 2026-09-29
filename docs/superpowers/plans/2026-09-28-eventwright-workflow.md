@@ -75,7 +75,7 @@
 - [x] 10 Сквозной отладочный прогон
 - [x] 11 Демонстрационные run (4)
 - [x] 12 CLAUDE.md (раздел workflow) и README.md
-- [ ] 13 Чистый checkout, DoD, push
+- [x] 13 Чистый checkout, DoD, push
 
 ## Где выполнять задачи: облако или локально
 
@@ -5745,36 +5745,36 @@ git commit -m "docs: CLAUDE.md workflow rules and README setup/run/resume"
 
 ### Задача 13: Чистый checkout + чек-лист DoD + push
 
-- [ ] **Step 1: Чистый клон**
+- [x] **Step 1: Чистый клон**
 
 ```bash
 git clone . ../Eventwright-clean && cd ../Eventwright-clean && npm install && npm run typecheck && npm run lint && npm test
 ```
 Expected: всё зелёное, никаких секретов не требуется.
 
-- [ ] **Step 2: Хэши демо-run не поехали**
+- [x] **Step 2: Хэши демо-run не поехали**
 
 ```bash
 node --import tsx -e "import { isApproved, readApproval } from '@/io/approval-store'; import { listRunIds } from '@/io/state-store'; for (const id of listRunIds()) console.log(id, readApproval(id) === null ? 'no-approval' : isApproved(id));"
 ```
 Expected: `true` для A, B, C; `no-approval` для D.
 
-- [ ] **Step 3:** В чистом клоне `npm run claude` → `/mcp` → `open-meteo` connected; `/plan-event …` доходит до уточнений. Удалить `../Eventwright-clean`.
-- [ ] **Step 4: Секреты:** `git log -p | grep -iE "sk-ant-|api[_-]?key\s*=\s*\S"` → пусто.
-- [ ] **Step 5: Одинаковая структура:** `grep "^## " runs/*/output/event-plan.md` → у A, B, C одинаковый список из 9 заголовков.
-- [ ] **Step 6: Чек-лист DoD** (отметить со ссылкой на файл):
-  - [ ] CLAUDE.md документирует workflow и правила → `CLAUDE.md`
-  - [ ] ≥5 subagents + 1 координатор → 10 в `.claude/agents/` + `/plan-event`
-  - [ ] Динамический выбор subagents → `state.plan` в Run C (`catering-planner` skipped)
-  - [ ] ≥2 skills используются → 5 в `.claude/skills/`
-  - [ ] PreToolUse и PostToolUse hooks используются → `.claude/settings.json`, `src/hooks/`
-  - [ ] MCP-сервер интегрирован и используется → `.claude/mcp.json`, `weather-analyst`, `validator`
-  - [ ] Web search используется → venue/catering/entertainment/logistics
-  - [ ] Всё под версионным контролем → `git status` чистый
-  - [ ] ≥3 run с входами, артефактами, состоянием → `runs/` (4)
-  - [ ] README: setup/run/resume/prerequisites/env → `README.md`
-  - [ ] Нет секретов → Step 4
-  - [ ] Работает из чистого checkout → Steps 1–3
+- [x] **Step 3:** В чистом клоне `npm run claude` → `/mcp` → `open-meteo` connected; `/plan-event …` доходит до уточнений. Удалить `../Eventwright-clean`.
+- [x] **Step 4: Секреты:** `git log -p | grep -iE "sk-ant-|api[_-]?key\s*=\s*\S"` → пусто.
+- [x] **Step 5: Одинаковая структура:** `grep "^## " runs/*/output/event-plan.md` → у A, B, C одинаковый список из 9 заголовков.
+- [x] **Step 6: Чек-лист DoD** (отметить со ссылкой на файл):
+  - [x] CLAUDE.md документирует workflow и правила → `CLAUDE.md`
+  - [x] ≥5 subagents + 1 координатор → 10 в `.claude/agents/` + `/plan-event`
+  - [x] Динамический выбор subagents → `state.plan` в Run C (`catering-planner` skipped)
+  - [x] ≥2 skills используются → 6 в `.claude/skills/`
+  - [x] PreToolUse и PostToolUse hooks используются → `.claude/settings.json`, `src/hooks/`
+  - [x] 2 MCP-сервера интегрированы и используются → `.claude/mcp.json` (open-meteo, holidays), `weather-analyst`, `venue-scout`, `validator`
+  - [x] Web search используется → venue/catering/entertainment/logistics
+  - [x] Всё под версионным контролем → `git status` чистый
+  - [x] ≥3 run с входами, артефактами, состоянием → `runs/` (4)
+  - [x] README: setup/run/resume/prerequisites/env → `README.md`
+  - [x] Нет секретов → Step 4
+  - [x] Работает из чистого checkout → Steps 1–3
 - [ ] **Step 7: Удалить этот временный план**
 
 ```bash
