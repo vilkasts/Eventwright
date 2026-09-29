@@ -1,8 +1,20 @@
 import { MAX_RETRIES } from "@/config/workflow";
+import { artifactOf } from "@/lib/dag-queries";
 import { appendLog } from "@/lib/state";
 import type { AgentName, WorkflowState } from "@/types/workflow";
 
 const NO_ARTIFACT_FINDING = "agent failed to produce its artifact";
+
+// A started agent stays "running" until post-write-state records its Write; an unchanged or
+// shell-written file on disk must not pass as fresh work.
+export const startedWithoutWriteIssues = (state: WorkflowState, name: AgentName): string[] => {
+  const artifact = artifactOf(name);
+  if (artifact === null || state.agents[name].status !== "running") return [];
+  return [
+    `${artifact} was not rewritten since ${name} started — write the whole artifact with the Write tool ` +
+      "(files written via Bash, Python or shell redirects are not recorded).",
+  ];
+};
 
 // An agent that keeps failing without an artifact never reaches the gates, so its limit is counted here.
 export const recordAgentStarts = (state: WorkflowState, names: readonly AgentName[], now: string): void => {

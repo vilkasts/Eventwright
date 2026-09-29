@@ -28,6 +28,14 @@ Repeat until the action is `await-approval`, `done` or `failed`:
 | `done`           | Report `runs/<runId>/output/event-plan.html` and `event-plan.md`. Stop.                                                                                                                                                                                                                                                                                                                                                                                    |
 | `failed`         | Failure report (below). Stop. Launch nothing else.                                                                                                                                                                                                                                                                                                                                                                                                         |
 
+## Efficiency rules
+
+- Run every workflow command exactly as `npm run -s wf -- <command> …` — no `cd`, pipes, `2>&1` or chained commands, so the project's allow rule matches it.
+- A finished subagent may produce two notifications (its hand-back and a task notification). Do not reply to them one by one; act once every agent of the current group has reported.
+- Between tool calls say nothing beyond the one-line progress update per group.
+- Read artifacts only when an action needs them (clarify, the approval summary) and only the sections you use (Grep for the heading, then Read with offset/limit). For run state use `npm run -s wf -- status <runId>`.
+- A failed `check` needs no investigation: `next` returns the agent in `retry` mode with the reason.
+
 ## Subagent prompt template
 
 ```
@@ -42,7 +50,7 @@ Today: <YYYY-MM-DD>
 
 For `requirements-formalizer` add `Phase: draft` (first run) or `Phase: finalize` (after clarifications).
 For `html-builder` replace the artifact line with `Output directory: runs/<runId>/output/`.
-Never paste other artifacts' content into prompts — agents read the files. Expect a one-line reply `DONE <file>` or `FAILED <reason>`.
+Never paste other artifacts' content into prompts — agents read the files. Agents must write their files with the Write tool only (their Contract says so). Expect a one-line reply `DONE <file>` or `FAILED <reason>`.
 
 ## Clarification phase (`clarify`)
 
@@ -56,7 +64,7 @@ Rewritten requirements (a gate retry or a revision) always need a new confirmati
 
 ## Approval phase (`await-approval`)
 
-1. Read `runs/<runId>/artifacts/08-event-plan.md` and show a compact summary: overview, weather verdict, chosen venue, menu highlights, program, run of show (times only), budget total vs. limit.
+1. Read only the needed sections of `runs/<runId>/artifacts/08-event-plan.md` (not the whole file) and show a compact summary: overview, weather verdict, chosen venue, menu highlights, program, run of show (times only), budget total vs. limit.
 2. Print exactly:
    > To approve this plan, type: `/approve-event <runId>`
    > To request changes, type: `/reject-event <runId> <what to change>`

@@ -6,10 +6,10 @@ import { fileExists, readText, readTextIfExists } from "@/io/files";
 import { printJson } from "@/io/output";
 import { artifactPath } from "@/io/paths";
 import { saveState } from "@/io/state-store";
-import { recordAgentStarts, recordStructureCheck } from "@/lib/agent-runs";
+import { recordAgentStarts, recordStructureCheck, startedWithoutWriteIssues } from "@/lib/agent-runs";
 import { checkArtifact, extractRequirementIds } from "@/lib/artifact-check";
 import { artifactDefinition, parseAgentName, requireArtifactOf } from "@/lib/dag-queries";
-import type { AgentName } from "@/types/workflow";
+import type { AgentName, WorkflowState } from "@/types/workflow";
 
 const inspectArtifact = (runId: string, name: AgentName): string[] => {
   const definition = artifactDefinition(name);
@@ -28,6 +28,12 @@ const inspectArtifact = (runId: string, name: AgentName): string[] => {
   });
 };
 
+// Structure issues plus a start that was never followed by a recorded Write.
+const artifactIssues = (state: WorkflowState, name: AgentName): string[] => [
+  ...startedWithoutWriteIssues(state, name),
+  ...inspectArtifact(state.runId, name),
+];
+
 // Agent starts and the structural gate after every group.
 export const AGENT_COMMANDS: CommandRegistry = {
   start: ([runId, ...names]) => {
@@ -41,7 +47,7 @@ export const AGENT_COMMANDS: CommandRegistry = {
   // Agent self-check: the state is not changed.
   lint: ([runId, name = ""]) => {
     const state = requireRun(runId);
-    const issues = inspectArtifact(state.runId, parseAgentName(name));
+    const issues = artifactIssues(state, parseAgentName(name));
     if (issues.length > 0) throw new Error(issues.join("\n"));
     printJson({ ok: true });
   },
@@ -49,7 +55,7 @@ export const AGENT_COMMANDS: CommandRegistry = {
   check: ([runId, name = ""]) => {
     const state = requireRun(runId);
     const agent = parseAgentName(name);
-    const issues = inspectArtifact(state.runId, agent);
+    const issues = artifactIssues(state, agent);
     recordStructureCheck(state, agent, issues, nowIso());
     saveState(state);
     if (issues.length > 0) throw new Error(issues.join("\n"));

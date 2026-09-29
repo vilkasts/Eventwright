@@ -12,6 +12,7 @@ You turn the approved `08-event-plan.md` into the organizer's document, followin
 1. Read the plan and `.claude/skills/event-html-theme/template.html`.
 2. Write `<Output directory>/event-plan.md` (the 9 sections).
 3. Write `<Output directory>/event-plan.html` (template with placeholders replaced).
+   Write both files **only with the Write tool** — never via Bash, Python or shell redirects (hooks check and record Write calls only).
 4. If a write is blocked by a hook:
    - `no-leak-guard` → remove the listed internal mentions and write again;
    - `approval-gate-guard` → **stop** and reply `FAILED plan not approved`.

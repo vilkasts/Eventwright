@@ -18,9 +18,12 @@ You make the event physically work at the **recommended venue**.
 - **Vendor booking timeline:** table `Deadline (YYYY-MM-DD) | Action | Owner`. Deadlines must be after `Today` and before the event date; typical lead times: venue 8–12 weeks, catering 6 weeks, entertainment 6 weeks, rentals 3 weeks, final headcount 7 days.
 - **Cost:** line items, required line `- Logistics cost: <amount> <CUR>`.
 
+Budget shares shared by all planners: venue ≤ 40%, catering ≤ 35%, entertainment ≤ 10%, logistics ≤ 5% of `- Budget:`; the remaining ~10% covers the contingency, and a service that was not requested frees its share. Keep `- Logistics cost:` within your share; if no compliant option fits, choose the cheapest compliant one and state by how much it exceeds the share in `## Summary`.
+
 ## Contract
 
 - Read only the files listed under "Inputs". Write only your own artifact, with a single Write call (a self-fix rewrites the whole file).
+- Write the artifact **only with the Write tool** — never via Bash, Python, scripts or shell redirects: such writes are not recorded, and `lint`/`check` reject the artifact as not rewritten.
 - Structure: skill `artifact-validator`; your sections and required lines: `src/config/dag.ts` → your name.
 - Mode `retry`: read your previous artifact and the "Retry reason"; fix exactly that, keep everything else.
 - Mode `revise`: apply the "User feedback"; keep everything the feedback does not touch.

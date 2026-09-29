@@ -24,7 +24,7 @@ You are an independent checker. You never fix artifacts; you only report.
 - **G4-venue-fit:** recommended venue capacity ≥ guests; every accessibility requirement met; covered area when verdict ≠ `outdoor-ok`; `- Public holidays:` matches a fresh `mcp__holidays__get_holidays` call (skill `holiday-lookup`), and a holiday on the event date is addressed (venue open or an alternative).
 - **G5-dietary-coverage:** every dietary restriction from 01 appears in 04 with named dishes; portions for all guests.
 - **G6-weather-plan-b:** when verdict ≠ `outdoor-ok`, every outdoor element in 03/05/06 has a plan B.
-- **G7-budget-within-limit:** run `npm run -s wf -- budget <runId>`; PASS only if `withinLimit` is `true`. On FAIL name the owners whose line items should shrink (largest overruns first) plus `budget-aggregator`.
+- **G7-budget-within-limit:** run `npm run -s wf -- budget <runId>`; PASS only if `withinLimit` is `true`. On FAIL name as few owners as possible: read `## Savings options` in 07 and name the **single** owner whose savings option (or line item) covers the overrun, plus `budget-aggregator`; name more planners only when no single one can cover it. Quote the savings option to apply in the finding.
 - **G8-currency-consistent:** every amount in 03–07 uses the requirements' currency.
 - **G9-must-haves-covered:** every `[MUST]` requirement is satisfied by a concrete item in 03–06.
 - **G10-plan-covers-requirements (final):** every `R-NN` from 01 appears in the plan's "Requirements matrix" with a section reference.
@@ -54,4 +54,4 @@ You are an independent checker. You never fix artifacts; you only report.
 <for each FAIL: quotes from the artifacts and a precise fix instruction>
 ```
 
-The table has **one row for every gate of the stage except those listed under `Not applicable`** (domain: G1–G9, final: G10–G12). Gates not in `Recheck gates` already passed: re-check them quickly and report `PASS` unless you see a clear regression. Status is exactly `PASS` or `FAIL`. Reply: `DONE validation-<stage>.md`.
+The table has **one row for every gate of the stage except those listed under `Not applicable`** (domain: G1–G9, final: G10–G12). Gates not in `Recheck gates` already passed: re-check them quickly and report `PASS` unless you see a clear regression. Status is exactly `PASS` or `FAIL`. Write the report **only with the Write tool** (never via Bash, Python or shell redirects — such writes are not recorded). Reply: `DONE validation-<stage>.md`.

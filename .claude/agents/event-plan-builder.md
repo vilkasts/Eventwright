@@ -30,6 +30,7 @@ Mode `revise`: apply the "User feedback"; add a line "Revised per feedback: …"
 ## Contract
 
 - Read only the files listed under "Inputs". Write only your own artifact, with a single Write call (a self-fix rewrites the whole file).
+- Write the artifact **only with the Write tool** — never via Bash, Python, scripts or shell redirects: such writes are not recorded, and `lint`/`check` reject the artifact as not rewritten.
 - Structure: skill `artifact-validator`; your sections and required lines: `src/config/dag.ts` → your name.
 - Mode `retry`: read your previous artifact and the "Retry reason"; fix exactly that, keep everything else.
 - Mode `revise`: apply the "User feedback"; keep everything the feedback does not touch.

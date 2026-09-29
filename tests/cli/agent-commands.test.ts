@@ -43,3 +43,15 @@ test("start and check reject unknown agents", () => {
   assert.match(runCli("start", runId, "nope").err, /Unknown agent: nope/);
   assert.match(runCli("check", runId, "html-builder").err, /does not own an artifact/);
 });
+
+test("check and lint reject an artifact that was not rewritten since the agent started", () => {
+  const runId = initRun("not-rewritten");
+  writeArtifact(runId, "01-requirements.md", requirementsFixture(runId));
+  runCli("start", runId, "requirements-formalizer");
+  const lint = runCli("lint", runId, "requirements-formalizer");
+  assert.equal(lint.code, 1);
+  assert.match(lint.err, /not rewritten since requirements-formalizer started/);
+  const check = runCli("check", runId, "requirements-formalizer");
+  assert.equal(check.code, 1);
+  assert.match(readRunState(runId).agents["requirements-formalizer"].lastError ?? "", /Write tool/);
+});
