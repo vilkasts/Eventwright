@@ -4,6 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Eventwright is an agentic event-planning workflow for Claude Code: a `/plan-event` coordinator, single-responsibility subagents, quality gates with targeted retries, deterministic human approval and resumable state.
 
+## Language
+
+**Everything in this repository is written in English**: code comments, documentation (`README.md`, `CLAUDE.md`, `runs/*/SCENARIO.md`), agent prompts, skills, slash commands, templates, workflow artifacts, the final event plan, CLI and hook messages, and commit messages.
+
+- The only exception: temporary implementation plans and handoff notes in `docs/superpowers/plans/` may be written in Russian.
+- A user's request may arrive in any language; agents still write artifacts in English and keep proper names as given.
+- Chat replies to the user may follow the user's language — that is conversation, not project content.
+
 ## Commands
 
 ```bash
@@ -144,7 +152,7 @@ tests/
 
 ### Comments
 
-- In **English**, brief, and only where the "why" is not obvious. No comments in other languages.
+- In **English** (see "Language" above), brief, and only where the "why" is not obvious. No comments in other languages.
 - Reference gate ids and workflow invariants where relevant (`// G7: the total with contingency must not exceed the limit`).
 - Prompts for agents, skills, artifacts, README and user-facing output are in English too.
 
