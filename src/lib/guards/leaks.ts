@@ -8,7 +8,8 @@ const LEAK_PATTERNS: readonly RegExp[] = [
   /\bvalidation-(?:domain|final)\.md\b/g,
   /workflow-state\.json/g,
   /approval\.json/g,
-  /\bruns\/[\w-]+/g,
+  // Hook paths on Windows use backslashes.
+  /\bruns[\\/][\w-]+/g,
   /\bmcp__[\w-]+/g,
   /\b(?:open-meteo|holidays):[a-z_]+/g,
   ...[...AGENT_NAMES, VALIDATOR_NAME].map((name) => new RegExp(`\\b${escapeRegExp(name)}\\b`, "g")),
