@@ -1,3 +1,6 @@
+import { parseMoney } from "@/lib/budget";
+import { sectionLines } from "@/lib/sections";
+import { escapeRegExp } from "@/lib/text";
 import type { ArtifactRules } from "@/types/checks";
 
 const HEAD_SECTIONS = ["Meta", "Summary"];
@@ -6,14 +9,11 @@ const SECTION_PREFIX = "## ";
 const TITLE_PREFIX = "# ";
 const CITATION = /(https?:\/\/\S+|(?:open-meteo|holidays):[a-z_]+|user-input)/;
 const PLACEHOLDER = /\b(?:TODO|TBD|FIXME)\b|\?\?\?|<(?:runId|agent name|Artifact title)[^>\n]*>/;
-const REQUIREMENT_ID = /\bR-\d{2}\b/g;
+const REQUIREMENT_ID = /\bR-\d{2,}\b/g;
+// A draft may leave a value open ("- Budget: unknown"); G1 requires real values later.
+const UNKNOWN_VALUE = "unknown";
 
-const sectionBody = (lines: readonly string[], heading: string): string[] => {
-  const start = lines.findIndex((line) => line.trim() === `${SECTION_PREFIX}${heading}`);
-  if (start === -1) return [];
-  const end = lines.findIndex((line, index) => index > start && line.startsWith(SECTION_PREFIX));
-  return lines.slice(start + 1, end === -1 ? lines.length : end);
-};
+const sectionBody = (lines: readonly string[], heading: string): string[] => sectionLines(lines, heading) ?? [];
 
 export const extractRequirementIds = (text: string): string[] => [...new Set(text.match(REQUIREMENT_ID) ?? [])].sort();
 
@@ -37,6 +37,20 @@ const metaIssues = (lines: readonly string[], runId: string, agent: string): str
 const hasCitation = (lines: readonly string[]): boolean =>
   sectionBody(lines, "Sources").some((line) => line.trim().startsWith("- ") && CITATION.test(line));
 
+// G7 parses these lines; a malformed amount must send the artifact's own agent back, not the gate owners.
+const moneyIssues = (text: string, labels: readonly string[]): string[] =>
+  labels
+    .filter((label) => {
+      const value = new RegExp(`^\\s*- ${escapeRegExp(label)}:(.*)$`, "m").exec(text)?.[1]?.trim();
+      if (value === undefined || value === UNKNOWN_VALUE) return false;
+      return parseMoney(`- ${label}: ${value}`, label) === null;
+    })
+    .map(
+      (label) =>
+        `'- ${label}:' must be '<amount> <CUR>' — digits with an optional '.' decimal part, no thousands ` +
+        `separators or symbols (e.g. '- ${label}: 9000 EUR').`,
+    );
+
 // Deterministic structure check: an empty array means the artifact is valid.
 export const checkArtifact = (text: string, rules: ArtifactRules): string[] => {
   const lines = text.split(/\r?\n/);
@@ -44,6 +58,7 @@ export const checkArtifact = (text: string, rules: ArtifactRules): string[] => {
   if (!lines[0]?.startsWith(TITLE_PREFIX)) issues.unshift("The first line must be a '# ' title.");
   const missingLines = rules.requiredLines.filter((prefix) => !lines.some((line) => line.trim().startsWith(prefix)));
   issues.push(...missingLines.map((prefix) => `Missing required line starting with '${prefix}'.`));
+  issues.push(...moneyIssues(text, rules.moneyLines ?? []));
   if (!hasCitation(lines))
     issues.push("'## Sources' has no citation (URL, open-meteo:<tool>, holidays:<tool> or user-input).");
   if (PLACEHOLDER.test(text)) issues.push("The artifact still contains placeholders (TODO/TBD/???/template <…>).");

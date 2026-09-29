@@ -3,7 +3,7 @@ import { existsSync, writeFileSync } from "node:fs";
 import { beforeEach, test } from "node:test";
 
 import { statePath } from "@/io/paths";
-import { createRun, listRunIds, loadState, saveState } from "@/io/state-store";
+import { createRun, listRunIds, loadState, saveState, stateExists } from "@/io/state-store";
 import { createInitialState } from "@/lib/state";
 import { NOW } from "@tests/support/state-fixtures";
 import { useTempProject } from "@tests/support/temp-project";
@@ -33,4 +33,15 @@ test("a corrupted state file is rejected with the file path", () => {
   createRun(createInitialState(RUN, NOW));
   writeFileSync(statePath(RUN), JSON.stringify({ runId: RUN }));
   assert.throws(() => loadState(RUN), /not a valid workflow state/);
+});
+
+test("run ids outside lowercase kebab-case never resolve to a path (F10)", () => {
+  assert.equal(stateExists("../escape"), false);
+  assert.throws(() => loadState("../escape"), /Invalid run id/);
+});
+
+test("a state file that names another run is rejected (F10)", () => {
+  createRun(createInitialState(RUN, NOW));
+  writeFileSync(statePath(RUN), JSON.stringify(createInitialState("2026-09-28-other", NOW)));
+  assert.throws(() => loadState(RUN), /belongs to run '2026-09-28-other'/);
 });

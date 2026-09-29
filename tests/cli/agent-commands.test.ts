@@ -55,3 +55,23 @@ test("check and lint reject an artifact that was not rewritten since the agent s
   assert.equal(check.code, 1);
   assert.match(readRunState(runId).agents["requirements-formalizer"].lastError ?? "", /Write tool/);
 });
+
+test("start refuses a skipped agent and an agent whose inputs are not done (F11)", () => {
+  const runId = initRun("start-guard");
+  writeArtifact(runId, "01-requirements.md", requirementsFixture(runId, "venue, entertainment, logistics"));
+  runCli("confirm-requirements", runId);
+  runCli("plan", runId);
+  assert.match(runCli("start", runId, "catering-planner").err, /not in the execution plan/);
+  assert.match(runCli("start", runId, "budget-aggregator").err, /inputs are done: requirements-formalizer/);
+  const state = readRunState(runId);
+  assert.equal(state.agents["catering-planner"].status, "skipped");
+  assert.equal(state.agents["budget-aggregator"].attempts, 0);
+});
+
+test("check sends a malformed budget back to the formalizer, and accepts 'unknown' in a draft (F07)", () => {
+  const runId = initRun("money-lines");
+  writeArtifact(runId, "01-requirements.md", requirementsFixture(runId).replace("9000 EUR", "9,000 EUR"));
+  assert.match(runCli("check", runId, "requirements-formalizer").err, /'- Budget:' must be/);
+  writeArtifact(runId, "01-requirements.md", requirementsFixture(runId).replace("9000 EUR", "unknown"));
+  assert.equal(runCli("check", runId, "requirements-formalizer").code, 0);
+});

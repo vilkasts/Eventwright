@@ -4,6 +4,9 @@ node_modules/
 !.env.example
 .claude/settings.local.json
 *.log
+# Left only by a process that crashed while writing or holding the run lock.
+runs/**/*.tmp
+runs/**/.lock/
 .DS_Store
 .idea/
 .vscode/

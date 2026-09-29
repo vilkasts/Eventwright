@@ -3,7 +3,10 @@ import { OUTPUT_AREA, RUNS_DIRECTORY } from "@/config/workflow";
 import { parseRunPath } from "@/lib/run-path";
 import type { HookInput } from "@/types/hooks";
 
-const SHELL_OUTPUT_PATH = new RegExp(`${RUNS_DIRECTORY}[\\\\/]([^\\\\/\\s"']+)[\\\\/]${OUTPUT_AREA}[\\\\/]`);
+// The output folder itself counts too (`cp x runs/r/output`, `cd runs/r/output && …`), not only files inside it.
+const SHELL_OUTPUT_PATH = new RegExp(
+  `${RUNS_DIRECTORY}[\\\\/]([^\\\\/\\s"']+)[\\\\/]${OUTPUT_AREA}(?:[\\\\/\\s"';&|)]|$)`,
+);
 // Anything that can write a file from a shell. Read-only commands (cat, grep, ls, Get-Content) pass;
 // a false positive here only asks for approval, a false negative would bypass it, so the list is broad.
 const SHELL_WRITE =

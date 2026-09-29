@@ -16,4 +16,5 @@ export type ArtifactRules = {
   runId: string;
   agent: string;
   requirementIds?: readonly string[];
+  moneyLines?: readonly string[];
 };

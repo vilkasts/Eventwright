@@ -5,15 +5,21 @@ import { nowIso } from "@/io/clock";
 import { fileExists, readJson, writeJsonAtomic } from "@/io/files";
 import { artifactsDirectory, outputDirectory, runsDirectory, statePath } from "@/io/paths";
 import { withRunLock } from "@/io/run-lock";
+import { isRunId } from "@/lib/run-path";
 import { isWorkflowState } from "@/lib/schemas/workflow-state";
 import type { WorkflowState } from "@/types/workflow";
 
-export const stateExists = (runId: string): boolean => fileExists(statePath(runId));
+export const stateExists = (runId: string): boolean => isRunId(runId) && fileExists(statePath(runId));
 
 export const loadState = (runId: string): WorkflowState => {
+  if (!isRunId(runId)) throw new Error(`Invalid run id '${runId}': use lowercase letters, digits and hyphens only.`);
   const raw = readJson(statePath(runId));
   if (!isWorkflowState(raw)) {
     throw new Error(`${statePath(runId)} is not a valid workflow state (schema ${SCHEMA_VERSION}).`);
+  }
+  // saveState writes to the folder named in the file: a copied run folder would overwrite the original run.
+  if (raw.runId !== runId) {
+    throw new Error(`${statePath(runId)} belongs to run '${raw.runId}' — a run folder must keep its own runId.`);
   }
   return raw;
 };
