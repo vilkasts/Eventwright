@@ -1,0 +1,21 @@
+{
+  "runId": "2026-09-30-krakow-summer-picnic",
+  "current": {
+    "decision": "approved",
+    "planSha256": "d4763f9f4d82bd3d41e9610cbab2d1956ea8920bd54fd14a7e8373daf1f76912",
+    "round": 1,
+    "feedback": null,
+    "recordedAt": "2026-09-30T11:57:36.550Z",
+    "recordedBy": "UserPromptSubmit hook (record-approval)"
+  },
+  "history": [
+    {
+      "decision": "approved",
+      "planSha256": "d4763f9f4d82bd3d41e9610cbab2d1956ea8920bd54fd14a7e8373daf1f76912",
+      "round": 1,
+      "feedback": null,
+      "recordedAt": "2026-09-30T11:57:36.550Z",
+      "recordedBy": "UserPromptSubmit hook (record-approval)"
+    }
+  ]
+}

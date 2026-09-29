@@ -1,0 +1,28 @@
+// PostToolUse: every artifact write is recorded in workflow-state.json (status, sha256, downstream invalidation).
+// Claude Code runs it after every successful file write; files outside a run are ignored.
+import { nowIso } from "@/io/clock";
+import { sha256OfFile } from "@/io/files";
+import { readHookInput, runHookSafely } from "@/io/hook-io";
+import { stateExists, updateState } from "@/io/state-store";
+import { parseRunPath } from "@/lib/run-path";
+import { recordArtifactWrite } from "@/lib/state";
+
+// Recorded as the writer when the main session (not a subagent) wrote the file.
+const COORDINATOR_WRITER = "coordinator";
+
+// Finds which run and file were written, hashes the file and records the write in the run's state.
+const recordWrite = async (): Promise<void> => {
+  const input = await readHookInput();
+  const location = parseRunPath(input.filePath ?? "");
+  if (location === null || !stateExists(location.runId)) return;
+  const hash = sha256OfFile(input.filePath ?? "");
+  if (hash === null) return;
+  const writer = input.agentType ?? COORDINATOR_WRITER;
+  // Agents of one group finish together: the run lock keeps their concurrent updates from overwriting each other.
+  updateState(location.runId, (state) => ({
+    isChanged: recordArtifactWrite(state, location, hash, writer, nowIso()),
+    result: null,
+  }));
+};
+
+await runHookSafely("post-write-state", recordWrite);

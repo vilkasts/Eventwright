@@ -1,0 +1,87 @@
+// Rules for starting agents and for the structure check that follows every group of agents.
+import { DAG } from "@/config/dag";
+import { MAX_RETRIES } from "@/config/workflow";
+import { artifactOf } from "@/lib/dag-queries";
+import { appendLog } from "@/lib/state";
+import type { AgentName, WorkflowState } from "@/types/workflow";
+
+// The finding reported when an agent keeps finishing without writing its file.
+const NO_ARTIFACT_FINDING = "agent failed to produce its artifact";
+
+// A started agent stays "running" until post-write-state records its Write; an unchanged or
+// shell-written file on disk must not pass as fresh work.
+export const startedWithoutWriteIssues = (state: WorkflowState, name: AgentName): string[] => {
+  const artifact = artifactOf(name);
+  if (artifact === null || state.agents[name].status !== "running") return [];
+  return [
+    `${artifact} was not rewritten since ${name} started — write the whole artifact with the Write tool ` +
+      "(files written via Bash, Python or shell redirects are not recorded).",
+  ];
+};
+
+// An input is ready when its agent is done, or when it was skipped because its service is not needed.
+const isFinished = (state: WorkflowState, name: AgentName): boolean =>
+  state.agents[name].status === "done" || state.agents[name].status === "skipped";
+
+// Only what `next` can return may start: a skipped agent or one whose inputs are not ready would block the graph.
+export const startIssues = (state: WorkflowState, names: readonly AgentName[]): string[] =>
+  names.flatMap((name) => {
+    if (state.agents[name].status === "skipped") {
+      return [`${name} is not in the execution plan — start only the agents that 'next' returns.`];
+    }
+    const waiting = DAG.agents[name].deps.filter((dependency) => !isFinished(state, dependency));
+    return waiting.length > 0 ? [`${name} cannot start before its inputs are done: ${waiting.join(", ")}.`] : [];
+  });
+
+// Called by `wf start` right before the coordinator launches agents: marks them running and counts the start.
+// An agent that keeps failing without an artifact never reaches the gates, so its limit is counted here.
+export const recordAgentStarts = (state: WorkflowState, names: readonly AgentName[], now: string): void => {
+  for (const name of names) {
+    const agent = state.agents[name];
+    agent.status = "running";
+    // F05: an output agent is done only when this round wrote every output file.
+    agent.outputs = {};
+    agent.attempts += 1;
+    agent.startsWithoutArtifact += 1;
+    if (agent.startsWithoutArtifact <= MAX_RETRIES + 1) continue;
+    state.failure ??= {
+      kind: "agent",
+      agent: name,
+      findings: [NO_ARTIFACT_FINDING],
+      attempts: agent.startsWithoutArtifact,
+      at: now,
+    };
+  }
+  appendLog(state, "agents-started", { agents: names }, now);
+};
+
+// Called by `wf check` with the problems found in an artifact (an empty list means it passed).
+// Structural gate after every group: a failure sends the agent back to work; the limit is MAX_RETRIES in a row.
+export const recordStructureCheck = (
+  state: WorkflowState,
+  name: AgentName,
+  issues: readonly string[],
+  now: string,
+): void => {
+  const agent = state.agents[name];
+  if (issues.length === 0) {
+    agent.structureOk = true;
+    agent.structuralFailures = 0;
+    appendLog(state, "structure-ok", { agent: name }, now);
+    return;
+  }
+  if (agent.status === "done") agent.status = "stale";
+  agent.structureOk = false;
+  agent.structuralFailures += 1;
+  agent.lastError = `Structure check: ${issues.join(" ")}`;
+  if (agent.structuralFailures > MAX_RETRIES) {
+    state.failure ??= {
+      kind: "agent",
+      agent: name,
+      findings: [...issues],
+      attempts: agent.structuralFailures,
+      at: now,
+    };
+  }
+  appendLog(state, "structure-failed", { agent: name, issues }, now);
+};

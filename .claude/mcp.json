@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "open-meteo": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["node_modules/open-meteo-mcp-server/dist/index.js"]
+    },
+    "holidays": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["node_modules/@pipeworx/mcp-holidays/bin/cli.js"]
+    }
+  }
+}

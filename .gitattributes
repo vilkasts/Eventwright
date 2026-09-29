@@ -1,0 +1,4 @@
+* text=auto eol=lf
+
+# Workflow artifacts are hashed (human approval is bound to the plan's sha256) — never rewrite line endings.
+runs/** -text

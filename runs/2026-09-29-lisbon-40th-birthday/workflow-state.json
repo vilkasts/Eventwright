@@ -1,0 +1,673 @@
+{
+  "schemaVersion": 1,
+  "runId": "2026-09-29-lisbon-40th-birthday",
+  "createdAt": "2026-09-29T14:14:41.621Z",
+  "updatedAt": "2026-09-29T14:37:10.199Z",
+  "phase": "done",
+  "requirementsConfirmed": true,
+  "plan": {
+    "services": [
+      "venue",
+      "catering",
+      "entertainment",
+      "logistics"
+    ],
+    "selected": [
+      "requirements-formalizer",
+      "weather-analyst",
+      "venue-scout",
+      "catering-planner",
+      "entertainment-planner",
+      "logistics-planner",
+      "budget-aggregator",
+      "event-plan-builder",
+      "html-builder"
+    ],
+    "skipped": [],
+    "at": "2026-09-29T14:22:09.820Z"
+  },
+  "failure": null,
+  "agents": {
+    "requirements-formalizer": {
+      "status": "done",
+      "attempts": 2,
+      "startsWithoutArtifact": 0,
+      "structuralFailures": 0,
+      "structureOk": true,
+      "sha256": "e43c45695d23847c9d9bcd061995f04c7c1c1b533a44e2dfc4fa3ec2be9a55cb",
+      "updatedAt": "2026-09-29T14:18:14.494Z",
+      "lastError": null,
+      "feedback": null,
+      "outputs": {}
+    },
+    "weather-analyst": {
+      "status": "done",
+      "attempts": 1,
+      "startsWithoutArtifact": 0,
+      "structuralFailures": 0,
+      "structureOk": true,
+      "sha256": "98f79a348830789cbd0a69dbf215d05ca78387d2792c943880af728e6db12afb",
+      "updatedAt": "2026-09-29T14:23:13.934Z",
+      "lastError": null,
+      "feedback": null,
+      "outputs": {}
+    },
+    "venue-scout": {
+      "status": "done",
+      "attempts": 1,
+      "startsWithoutArtifact": 0,
+      "structuralFailures": 0,
+      "structureOk": true,
+      "sha256": "09724e4660188c7213d0b7eacc7c03582555eb8e5f4d659a3806ae0f2b6e04bc",
+      "updatedAt": "2026-09-29T14:24:46.299Z",
+      "lastError": null,
+      "feedback": null,
+      "outputs": {}
+    },
+    "catering-planner": {
+      "status": "done",
+      "attempts": 2,
+      "startsWithoutArtifact": 0,
+      "structuralFailures": 0,
+      "structureOk": true,
+      "sha256": "fba57c7c118724976a8da6ce86683babdb30d267eb0d27ee3f0b6d0a02641225",
+      "updatedAt": "2026-09-29T14:28:37.295Z",
+      "lastError": null,
+      "feedback": null,
+      "outputs": {}
+    },
+    "entertainment-planner": {
+      "status": "done",
+      "attempts": 3,
+      "startsWithoutArtifact": 0,
+      "structuralFailures": 0,
+      "structureOk": true,
+      "sha256": "9fad653872129b6e3d2ced7a53989b104cfb6a845549432688195c15685a067b",
+      "updatedAt": "2026-09-29T14:31:19.932Z",
+      "lastError": null,
+      "feedback": null,
+      "outputs": {}
+    },
+    "logistics-planner": {
+      "status": "done",
+      "attempts": 2,
+      "startsWithoutArtifact": 0,
+      "structuralFailures": 0,
+      "structureOk": true,
+      "sha256": "943900b548a0d790f6957eb999d0ca4ef0d99b667522d93624bd3613ada82417",
+      "updatedAt": "2026-09-29T14:28:38.324Z",
+      "lastError": null,
+      "feedback": null,
+      "outputs": {}
+    },
+    "budget-aggregator": {
+      "status": "done",
+      "attempts": 2,
+      "startsWithoutArtifact": 0,
+      "structuralFailures": 0,
+      "structureOk": true,
+      "sha256": "648ae9b7ca4b164388bfa5845eaeffd52566f327d6c69829b7bb269fbc8e98e4",
+      "updatedAt": "2026-09-29T14:32:07.010Z",
+      "lastError": null,
+      "feedback": null,
+      "outputs": {}
+    },
+    "event-plan-builder": {
+      "status": "done",
+      "attempts": 1,
+      "startsWithoutArtifact": 0,
+      "structuralFailures": 0,
+      "structureOk": true,
+      "sha256": "43bb034ce635f4fb13f86c23be4a39e15834e66a6539d60da18e6d9605688175",
+      "updatedAt": "2026-09-29T14:34:06.983Z",
+      "lastError": null,
+      "feedback": null,
+      "outputs": {}
+    },
+    "html-builder": {
+      "status": "done",
+      "attempts": 1,
+      "startsWithoutArtifact": 0,
+      "structuralFailures": 0,
+      "structureOk": false,
+      "sha256": null,
+      "updatedAt": "2026-09-29T14:36:57.119Z",
+      "lastError": null,
+      "feedback": null,
+      "outputs": {
+        "event-plan.md": "5db029b03f1466127d0412e53b289a6a8496235d4b4d67b32170fb4b822a9cbc",
+        "event-plan.html": "4390da90f1d17b6b5bd4d773236063d96a41dd2bae161c0321199c1c54b9f115"
+      }
+    }
+  },
+  "gates": {
+    "G1-requirements-complete": {
+      "status": "pass",
+      "attempts": 0,
+      "findings": []
+    },
+    "G2-sources-cited": {
+      "status": "pass",
+      "attempts": 0,
+      "findings": []
+    },
+    "G3-weather-grounded": {
+      "status": "pass",
+      "attempts": 0,
+      "findings": []
+    },
+    "G4-venue-fit": {
+      "status": "pass",
+      "attempts": 0,
+      "findings": []
+    },
+    "G5-dietary-coverage": {
+      "status": "pass",
+      "attempts": 0,
+      "findings": []
+    },
+    "G6-weather-plan-b": {
+      "status": "pass",
+      "attempts": 0,
+      "findings": []
+    },
+    "G7-budget-within-limit": {
+      "status": "pass",
+      "attempts": 0,
+      "findings": []
+    },
+    "G8-currency-consistent": {
+      "status": "pass",
+      "attempts": 0,
+      "findings": []
+    },
+    "G9-must-haves-covered": {
+      "status": "pass",
+      "attempts": 0,
+      "findings": []
+    },
+    "G10-plan-covers-requirements": {
+      "status": "pass",
+      "attempts": 0,
+      "findings": []
+    },
+    "G11-plan-consistent-with-artifacts": {
+      "status": "pass",
+      "attempts": 0,
+      "findings": []
+    },
+    "G12-timeline-feasible": {
+      "status": "pass",
+      "attempts": 0,
+      "findings": []
+    }
+  },
+  "validation": {
+    "domain": {
+      "sha256": "84724cd683cc681864eb8ee627900f9f98a3fa129fd26db3b06e1588212b2e35",
+      "recorded": true,
+      "at": "2026-09-29T14:33:06.069Z"
+    },
+    "final": {
+      "sha256": "62a83134da47140eb38466fc6e0702f07c15631431fe5af66060b7a8da26a01e",
+      "recorded": true,
+      "at": "2026-09-29T14:34:50.581Z"
+    }
+  },
+  "log": [
+    {
+      "at": "2026-09-29T14:14:41.621Z",
+      "event": "init",
+      "details": {}
+    },
+    {
+      "at": "2026-09-29T14:14:56.953Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "requirements-formalizer"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T14:15:19.097Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "requirements-formalizer",
+        "file": "01-requirements.md",
+        "writer": "requirements-formalizer",
+        "sha256": "1bd31c6e8439"
+      }
+    },
+    {
+      "at": "2026-09-29T14:15:29.330Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "requirements-formalizer"
+      }
+    },
+    {
+      "at": "2026-09-29T14:17:53.412Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "requirements-formalizer"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T14:18:14.494Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "requirements-formalizer",
+        "file": "01-requirements.md",
+        "writer": "requirements-formalizer",
+        "sha256": "e43c45695d23"
+      }
+    },
+    {
+      "at": "2026-09-29T14:18:24.493Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "requirements-formalizer"
+      }
+    },
+    {
+      "at": "2026-09-29T14:22:03.702Z",
+      "event": "requirements-confirmed",
+      "details": {}
+    },
+    {
+      "at": "2026-09-29T14:22:09.820Z",
+      "event": "execution-plan",
+      "details": {
+        "selected": [
+          "requirements-formalizer",
+          "weather-analyst",
+          "venue-scout",
+          "catering-planner",
+          "entertainment-planner",
+          "logistics-planner",
+          "budget-aggregator",
+          "event-plan-builder",
+          "html-builder"
+        ],
+        "skipped": []
+      }
+    },
+    {
+      "at": "2026-09-29T14:22:15.105Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "weather-analyst"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T14:23:13.934Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "weather-analyst",
+        "file": "02-weather-outlook.md",
+        "writer": "weather-analyst",
+        "sha256": "98f79a348830"
+      }
+    },
+    {
+      "at": "2026-09-29T14:23:24.175Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "weather-analyst"
+      }
+    },
+    {
+      "at": "2026-09-29T14:23:31.037Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "venue-scout"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T14:24:46.299Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "venue-scout",
+        "file": "03-venues.md",
+        "writer": "venue-scout",
+        "sha256": "09724e466018"
+      }
+    },
+    {
+      "at": "2026-09-29T14:24:56.917Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "venue-scout"
+      }
+    },
+    {
+      "at": "2026-09-29T14:25:04.116Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "catering-planner",
+          "entertainment-planner",
+          "logistics-planner"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T14:25:49.690Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "entertainment-planner",
+        "file": "05-entertainment.md",
+        "writer": "entertainment-planner",
+        "sha256": "6247b6ef62de"
+      }
+    },
+    {
+      "at": "2026-09-29T14:25:56.657Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "logistics-planner",
+        "file": "06-logistics.md",
+        "writer": "logistics-planner",
+        "sha256": "c274716d252d"
+      }
+    },
+    {
+      "at": "2026-09-29T14:26:04.251Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "catering-planner",
+        "file": "04-catering.md",
+        "writer": "catering-planner",
+        "sha256": "8ba196a99502"
+      }
+    },
+    {
+      "at": "2026-09-29T14:26:18.399Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "catering-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T14:26:19.369Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "entertainment-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T14:26:20.125Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "logistics-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T14:26:26.945Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "budget-aggregator"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T14:26:49.695Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "budget-aggregator",
+        "file": "07-budget.md",
+        "writer": "budget-aggregator",
+        "sha256": "73a088cb8cb8"
+      }
+    },
+    {
+      "at": "2026-09-29T14:27:06.416Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "budget-aggregator"
+      }
+    },
+    {
+      "at": "2026-09-29T14:27:50.841Z",
+      "event": "validation-written",
+      "details": {
+        "stage": "domain",
+        "writer": "validator"
+      }
+    },
+    {
+      "at": "2026-09-29T14:28:00.466Z",
+      "event": "gates-recorded",
+      "details": {
+        "stage": "domain",
+        "passed": 7,
+        "failed": [
+          "G2-sources-cited",
+          "G7-budget-within-limit"
+        ],
+        "blocked": []
+      }
+    },
+    {
+      "at": "2026-09-29T14:28:08.698Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "catering-planner",
+          "entertainment-planner",
+          "logistics-planner"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T14:28:37.295Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "catering-planner",
+        "file": "04-catering.md",
+        "writer": "catering-planner",
+        "sha256": "fba57c7c1187"
+      }
+    },
+    {
+      "at": "2026-09-29T14:28:38.324Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "logistics-planner",
+        "file": "06-logistics.md",
+        "writer": "logistics-planner",
+        "sha256": "943900b548a0"
+      }
+    },
+    {
+      "at": "2026-09-29T14:28:52.311Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "catering-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T14:28:53.046Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "entertainment-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T14:28:53.774Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "logistics-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T14:29:10.580Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "entertainment-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T14:29:25.098Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "entertainment-planner"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T14:30:05.482Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "entertainment-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T14:31:19.932Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "entertainment-planner",
+        "file": "05-entertainment.md",
+        "writer": "entertainment-planner",
+        "sha256": "9fad65387212"
+      }
+    },
+    {
+      "at": "2026-09-29T14:31:37.544Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "entertainment-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T14:31:46.001Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "budget-aggregator"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T14:32:07.010Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "budget-aggregator",
+        "file": "07-budget.md",
+        "writer": "budget-aggregator",
+        "sha256": "648ae9b7ca4b"
+      }
+    },
+    {
+      "at": "2026-09-29T14:32:23.693Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "budget-aggregator"
+      }
+    },
+    {
+      "at": "2026-09-29T14:32:56.801Z",
+      "event": "validation-written",
+      "details": {
+        "stage": "domain",
+        "writer": "validator"
+      }
+    },
+    {
+      "at": "2026-09-29T14:33:06.069Z",
+      "event": "gates-recorded",
+      "details": {
+        "stage": "domain",
+        "passed": 9,
+        "failed": [],
+        "blocked": []
+      }
+    },
+    {
+      "at": "2026-09-29T14:33:12.142Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "event-plan-builder"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T14:34:06.983Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "event-plan-builder",
+        "file": "08-event-plan.md",
+        "writer": "event-plan-builder",
+        "sha256": "43bb034ce635"
+      }
+    },
+    {
+      "at": "2026-09-29T14:34:16.983Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "event-plan-builder"
+      }
+    },
+    {
+      "at": "2026-09-29T14:34:44.563Z",
+      "event": "validation-written",
+      "details": {
+        "stage": "final",
+        "writer": "validator"
+      }
+    },
+    {
+      "at": "2026-09-29T14:34:50.581Z",
+      "event": "gates-recorded",
+      "details": {
+        "stage": "final",
+        "passed": 3,
+        "failed": [],
+        "blocked": []
+      }
+    },
+    {
+      "at": "2026-09-29T14:35:32.097Z",
+      "event": "approval-approved",
+      "details": {
+        "round": 1,
+        "planSha256": "43bb034ce635"
+      }
+    },
+    {
+      "at": "2026-09-29T14:35:41.675Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "html-builder"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T14:36:16.938Z",
+      "event": "output-written",
+      "details": {
+        "file": "event-plan.md",
+        "writer": "html-builder"
+      }
+    },
+    {
+      "at": "2026-09-29T14:36:57.119Z",
+      "event": "output-written",
+      "details": {
+        "file": "event-plan.html",
+        "writer": "html-builder"
+      }
+    }
+  ]
+}
