@@ -64,7 +64,7 @@
 - [x] 4.3 `record-approval`
 - [x] 4.4 `approval-gate-guard`
 - [x] 4.5 `no-leak-guard`
-- [ ] 4.6 `.claude/settings.json`
+- [x] 4.6 `.claude/settings.json`
 - [ ] 5 Проверка MCP в Claude Code
 - [ ] 6 Skills (5 шт.)
 - [ ] 7 Subagents (10 шт.)
