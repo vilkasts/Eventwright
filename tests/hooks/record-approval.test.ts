@@ -46,3 +46,13 @@ test("records a rejection with feedback (prompt_text field also accepted)", () =
   assert.equal(runHook("record-approval", { prompt_text: `/reject-event ${RUN} add a photo booth` }).code, 0);
   assert.equal(readApproval(RUN)?.current.feedback, "add a photo booth");
 });
+
+test("blocks a malformed approval instead of ignoring it", () => {
+  prepareAwaitingApproval();
+  for (const prompt of [`/approve-event ${RUN} now`, "/approve-event"]) {
+    const result = runHook("record-approval", { prompt });
+    assert.equal(result.code, 2, prompt);
+    assert.match(result.stderr, /Usage: \/approve-event <runId>/);
+  }
+  assert.equal(existsSync(approvalPath(RUN)), false);
+});

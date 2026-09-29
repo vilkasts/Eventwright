@@ -23,6 +23,7 @@ export const DAG: Dag = {
         "Requirements",
       ],
       requiredLines: ["- Date:", "- City:", "- Guests:", "- Budget:", "- Services:"],
+      moneyLines: ["Budget"],
     },
     "weather-analyst": {
       kind: "artifact",
@@ -87,6 +88,7 @@ export const DAG: Dag = {
       stage: "domain",
       sections: ["Line items", "Totals", "Savings options"],
       requiredLines: ["- Subtotal:", "- Contingency (10%):", "- Total with contingency:", "- Budget limit:"],
+      moneyLines: ["Total with contingency"],
     },
     "event-plan-builder": {
       kind: "artifact",

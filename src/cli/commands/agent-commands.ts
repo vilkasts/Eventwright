@@ -5,7 +5,7 @@ import { nowIso } from "@/io/clock";
 import { fileExists, readText, readTextIfExists } from "@/io/files";
 import { printJson } from "@/io/output";
 import { artifactPath } from "@/io/paths";
-import { recordAgentStarts, recordStructureCheck, startedWithoutWriteIssues } from "@/lib/agent-runs";
+import { recordAgentStarts, recordStructureCheck, startedWithoutWriteIssues, startIssues } from "@/lib/agent-runs";
 import { checkArtifact, extractRequirementIds } from "@/lib/artifact-check";
 import { artifactDefinition, parseAgentName, requireArtifactOf } from "@/lib/dag-queries";
 import type { AgentName, WorkflowState } from "@/types/workflow";
@@ -21,6 +21,7 @@ const inspectArtifact = (runId: string, name: AgentName): string[] => {
   return checkArtifact(readText(file), {
     sections: definition.sections,
     requiredLines: definition.requiredLines,
+    moneyLines: definition.moneyLines ?? [],
     runId,
     agent: name,
     requirementIds,
@@ -38,6 +39,8 @@ export const AGENT_COMMANDS: CommandRegistry = {
   start: ([runId, ...names]) => {
     const agents = names.map(parseAgentName);
     updateRun(runId, (state) => {
+      const issues = startIssues(state, agents);
+      if (issues.length > 0) throw new Error(issues.join("\n"));
       recordAgentStarts(state, agents, nowIso());
       return { isChanged: true, result: null };
     });

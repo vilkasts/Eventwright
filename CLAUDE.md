@@ -40,7 +40,7 @@ Hub-and-spoke: the coordinator is the main Claude Code session running a slash c
 | 5 hooks        | `src/hooks/*.ts`, registered in `.claude/settings.json`                    | PreToolUse: `state-integrity-guard`, `approval-gate-guard`, `no-leak-guard`; PostToolUse: `post-write-state`; UserPromptSubmit: `record-approval` |
 | MCP (2)        | `.claude/mcp.json` → `open-meteo-mcp-server`, `@pipeworx/mcp-holidays`     | Weather (geocoding, forecast, archive) for `weather-analyst` and `validator`; public holidays (Nager.Date) for `venue-scout` and `validator` (G4) |
 | Workflow CLI   | `src/cli/main.ts` (`npm run -s wf -- …`)                                   | The only way the coordinator changes state; `next` computes the next step                                                                         |
-| Workflow graph | `src/config/dag.ts`                                                        | Agents, dependencies, artifacts, sections, required lines, gates and owners                                                                       |
+| Workflow graph | `src/config/dag.ts`                                                        | Agents, dependencies, artifacts, sections, required and money lines, gates and owners                                                             |
 | Runs           | `runs/<runId>/`                                                            | `input.md`, `clarifications.md`, `artifacts/`, `workflow-state.json`, `approval.json`, `output/`                                                  |
 
 Execution order (groups run one after another; agents inside a group run in parallel):
@@ -80,7 +80,7 @@ A gate whose owners are all skipped by the execution plan is `n/a`: the validato
 7. Which service planners run is decided by the confirmed `- Services:` line and applied by `wf plan`; skipped agents are never started or invalidated.
 8. After a rejection, the coordinator invalidates upstream owners per the ownership table; downstream regenerates automatically.
 9. Never format or hand-edit `runs/**` (hashes).
-10. Changing `src/config/dag.ts` (agents, sections, requiredLines, gates) requires updating agents, `validator.md` and tests.
+10. Changing `src/config/dag.ts` (agents, sections, requiredLines, moneyLines, gates) requires updating agents, `validator.md` and tests.
 11. The coordinator runs on Sonnet: the four slash commands and skill `workflow-orchestration` set `model: sonnet` (the override lasts for the current turn, whatever the session model is); subagents set their own `model`. Keep it that way — the coordinator is the longest-lived context and dominates token usage.
 
 ## Code style

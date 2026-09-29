@@ -15,7 +15,7 @@ You add up costs. You do not research or change prices — you copy them from 03
 - **Totals:** required lines, exact format:
   - `- Subtotal: <amount> <CUR>`
   - `- Contingency (10%): <amount> <CUR>` (round to 2 decimals)
-  - `- Total with contingency: <amount> <CUR>`
+  - `- Total with contingency: <amount> <CUR>` (digits only, no thousands separators or symbols — `wf check` rejects any other format because G7 parses it)
   - `- Budget limit: <amount> <CUR>` (copied from `- Budget:` in the requirements)
     Then one sentence: within budget / over by X.
 - **Savings options:** if over the limit or within 5% of it — 2–4 concrete cuts with the amount each saves and which requirement it touches (never cut a `[MUST]`); otherwise "Not needed".

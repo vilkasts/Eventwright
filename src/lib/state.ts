@@ -106,7 +106,7 @@ export const recordArtifactWrite = (
 ): boolean => {
   const validationStage = validationStageOf(location);
   if (validationStage !== null) {
-    state.validation[validationStage] = { sha256: hash, recorded: false, at: now };
+    state.validation[validationStage] = { sha256: hash, recorded: false, at: now, writer };
     appendLog(state, "validation-written", { stage: validationStage, writer }, now);
     return true;
   }

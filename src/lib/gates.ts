@@ -1,6 +1,7 @@
 import { DAG } from "@/config/dag";
-import { MAX_RETRIES } from "@/config/workflow";
+import { MAX_RETRIES, VALIDATOR_NAME } from "@/config/workflow";
 import { downstreamOf, gateIdsForStage, isAgentName } from "@/lib/dag-queries";
+import { sectionLines } from "@/lib/sections";
 import { appendLog, markStale } from "@/lib/state";
 import type { AgentName, GatedStage, GateId, GateSummary, WorkflowState } from "@/types/workflow";
 
@@ -13,19 +14,32 @@ type GateRow = {
 const GATE_ROW_ID = /^G\d+-/;
 const MIN_GATE_ROW_CELLS = 6;
 const VERDICTS: readonly string[] = ["PASS", "FAIL"];
+const RESULTS_SECTION = "Gate results";
+
+// Only the results table counts: a row quoted in '## Details' must not override the verdict (F15).
+const resultLines = (reportText: string): string[] => {
+  const lines = sectionLines(reportText.split(/\r?\n/), RESULTS_SECTION);
+  if (lines === null) throw new Error(`Validator report lacks the '## ${RESULTS_SECTION}' section.`);
+  return lines;
+};
 
 // A validator report row: | G5-dietary-coverage | FAIL | catering-planner | finding |
 export const parseGateTable = (reportText: string): Map<string, GateRow> => {
   const rows = new Map<string, GateRow>();
-  for (const line of reportText.split(/\r?\n/)) {
+  const duplicates = new Set<string>();
+  for (const line of resultLines(reportText)) {
     const cells = line.split("|").map((cell) => cell.trim());
     const [, id = "", status = "", owners = "", finding = ""] = cells;
     if (cells.length < MIN_GATE_ROW_CELLS || !GATE_ROW_ID.test(id)) continue;
+    if (rows.has(id)) duplicates.add(id);
     const ownerList = owners
       .split(",")
       .map((owner) => owner.trim())
       .filter((owner) => owner.length > 0);
     rows.set(id, { status: status.toUpperCase(), owners: ownerList, finding });
+  }
+  if (duplicates.size > 0) {
+    throw new Error(`Validator report has more than one row for gates: ${[...duplicates].join(", ")}.`);
   }
   return rows;
 };
@@ -68,6 +82,10 @@ export const staleReportIssue = (
   if (report === null) {
     return `The ${stage} validator report was not written by the validator since the gates were reset — relaunch the validator.`;
   }
+  // Only the validator subagent may produce gate verdicts; a report written by the coordinator is not one.
+  if (report.writer !== VALIDATOR_NAME) {
+    return `The ${stage} validator report was written by ${report.writer ?? "an unknown writer"}, not by the ${VALIDATOR_NAME} subagent — relaunch the validator.`;
+  }
   if (report.recorded) return `The ${stage} validator report was already recorded — relaunch the validator.`;
   if (report.sha256 !== reportSha256) {
     return `The ${stage} validator report changed after the validator wrote it — relaunch the validator.`;
@@ -107,7 +125,9 @@ export const recordGates = (state: WorkflowState, stage: GatedStage, reportText:
   }
 
   if (state.failure === null) retryAffectedAgents(state, findingsByOwner);
-  state.validation[stage] = { sha256: state.validation[stage]?.sha256 ?? null, recorded: true, at: now };
+  const report = state.validation[stage];
+  state.validation[stage] =
+    report === null ? { sha256: null, recorded: true, at: now } : { ...report, recorded: true, at: now };
   const failedIds = summary.failed.map((failure) => failure.id);
   appendLog(
     state,

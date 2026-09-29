@@ -1,3 +1,4 @@
+import { DAG } from "@/config/dag";
 import { MAX_RETRIES } from "@/config/workflow";
 import { artifactOf } from "@/lib/dag-queries";
 import { appendLog } from "@/lib/state";
@@ -15,6 +16,19 @@ export const startedWithoutWriteIssues = (state: WorkflowState, name: AgentName)
       "(files written via Bash, Python or shell redirects are not recorded).",
   ];
 };
+
+const isFinished = (state: WorkflowState, name: AgentName): boolean =>
+  state.agents[name].status === "done" || state.agents[name].status === "skipped";
+
+// Only what `next` can return may start: a skipped agent or one whose inputs are not ready would block the graph.
+export const startIssues = (state: WorkflowState, names: readonly AgentName[]): string[] =>
+  names.flatMap((name) => {
+    if (state.agents[name].status === "skipped") {
+      return [`${name} is not in the execution plan — start only the agents that 'next' returns.`];
+    }
+    const waiting = DAG.agents[name].deps.filter((dependency) => !isFinished(state, dependency));
+    return waiting.length > 0 ? [`${name} cannot start before its inputs are done: ${waiting.join(", ")}.`] : [];
+  });
 
 // An agent that keeps failing without an artifact never reaches the gates, so its limit is counted here.
 export const recordAgentStarts = (state: WorkflowState, names: readonly AgentName[], now: string): void => {

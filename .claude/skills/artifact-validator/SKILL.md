@@ -27,7 +27,7 @@ Required lines: `src/config/dag.ts → DAG.agents["<name>"].requiredLines` must 
 
 ## Money format (deterministic budget check)
 
-`- <Label>: <amount> <CUR>` — amount is digits with an optional `.` decimal part, **no thousands separators**, CUR is the ISO code from the requirements. Example: `- Catering cost: 2400 EUR`.
+`- <Label>: <amount> <CUR>` — amount is digits with an optional `.` decimal part, **no thousands separators**, CUR is the ISO code from the requirements. Example: `- Catering cost: 2400 EUR`. For the labels in `DAG.agents["<name>"].moneyLines` (`- Budget:` in 01, `- Total with contingency:` in 07) `wf check` enforces this format (only `unknown` is allowed besides it, in a requirements draft), because G7 parses them.
 
 ## Citation rules
 

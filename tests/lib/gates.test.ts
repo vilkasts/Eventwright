@@ -18,7 +18,18 @@ beforeEach(() => {
 
 describe("parseGateTable", () => {
   test("ignores header rows", () => {
-    assert.equal(parseGateTable("| Gate | Status |\n|---|---|\n").size, 0);
+    assert.equal(parseGateTable("## Gate results\n| Gate | Status |\n|---|---|\n").size, 0);
+  });
+  test("reads only the Gate results section, so a row quoted in Details cannot override it", () => {
+    const report = `${gateReport("domain", { "G4-venue-fit": "venue-scout" })}\n## Details\n| G4-venue-fit | PASS | venue-scout | — |`;
+    assert.equal(parseGateTable(report).get("G4-venue-fit")?.status, "FAIL");
+  });
+  test("rejects a report without the Gate results section", () => {
+    assert.throws(() => parseGateTable("| G1-requirements-complete | PASS | x | — |"), /Gate results/);
+  });
+  test("rejects duplicate rows for one gate", () => {
+    const report = `${gateReport("domain")}\n| G4-venue-fit | FAIL | venue-scout | again |`;
+    assert.throws(() => parseGateTable(report), /more than one row for gates: G4-venue-fit/);
   });
 });
 
@@ -36,6 +47,15 @@ describe("staleReportIssue", () => {
   test("rejects a report file that differs from the one the validator wrote", () => {
     recordArtifactWrite(state, REPORT, "hash-1", "validator", NOW);
     assert.match(staleReportIssue(state, "domain", "hash-other") ?? "", /changed after the validator wrote it/);
+  });
+  test("rejects a report that was not written by the validator subagent", () => {
+    recordArtifactWrite(state, REPORT, "hash-1", "coordinator", NOW);
+    assert.match(staleReportIssue(state, "domain", "hash-1") ?? "", /written by coordinator, not by the validator/);
+  });
+  test("keeps the writer when the report is recorded", () => {
+    recordArtifactWrite(state, REPORT, "hash-1", "validator", NOW);
+    recordGates(state, "domain", gateReport("domain"), NOW);
+    assert.equal(state.validation.domain?.writer, "validator");
   });
   test("accepts the report the validator has just written", () => {
     recordArtifactWrite(state, REPORT, "hash-1", "validator", NOW);

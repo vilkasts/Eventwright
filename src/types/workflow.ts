@@ -54,6 +54,8 @@ export type ArtifactAgentDefinition = AgentDefinitionBase & {
   readonly artifact: string;
   readonly sections: readonly string[];
   readonly requiredLines: readonly string[];
+  // Labels of money lines that must be '- <Label>: <amount> <CUR>' (or 'unknown' in a draft); G7 parses them.
+  readonly moneyLines?: readonly string[];
   readonly coversRequirements?: true;
 };
 
@@ -98,6 +100,8 @@ export type ValidationRecord = {
   sha256: string | null;
   recorded: boolean;
   at: string;
+  // Who wrote the report (post-write-state); absent in runs recorded before the field existed.
+  writer?: string;
 };
 
 export type ExecutionPlan = {

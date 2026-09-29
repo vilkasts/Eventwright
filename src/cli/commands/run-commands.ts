@@ -23,9 +23,14 @@ export const RUN_COMMANDS: CommandRegistry = {
 
   list: () => {
     printJson(
+      // One broken run is reported next to the others instead of hiding them all (F12).
       listRunIds().map((runId) => {
-        const state = loadState(runId);
-        return { runId, phase: state.phase, updatedAt: state.updatedAt, failure: state.failure };
+        try {
+          const state = loadState(runId);
+          return { runId, phase: state.phase, updatedAt: state.updatedAt, failure: state.failure };
+        } catch (error) {
+          return { runId, error: error instanceof Error ? error.message : String(error) };
+        }
       }),
     );
   },

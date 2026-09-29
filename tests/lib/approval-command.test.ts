@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { parseApprovalCommand } from "@/lib/approval-command";
+import { isDecisionAttempt, parseApprovalCommand } from "@/lib/approval-command";
 
 test("parses an approval", () => {
   assert.deepEqual(parseApprovalCommand("  /approve-event run-1 "), { runId: "run-1", decision: "approved" });
@@ -26,4 +26,11 @@ test("a rejection without feedback keeps feedback null", () => {
 test("ignores ordinary prompts and approvals with extra words", () => {
   assert.equal(parseApprovalCommand("please approve"), null);
   assert.equal(parseApprovalCommand("/approve-event run-1 now"), null);
+});
+
+test("recognizes a decision command that does not parse", () => {
+  assert.equal(isDecisionAttempt("/approve-event run-1 now"), true);
+  assert.equal(isDecisionAttempt("/approve-event"), true);
+  assert.equal(isDecisionAttempt("/approve-eventually"), false);
+  assert.equal(isDecisionAttempt("please /approve-event run-1"), false);
 });

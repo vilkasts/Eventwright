@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
+import { writeFileSync } from "node:fs";
 import { beforeEach, test } from "node:test";
+
+import { statePath } from "@/io/paths";
 
 import { cliJson, initRun, readRunState, runCli } from "@tests/support/run-cli";
 import { useTempProject } from "@tests/support/temp-project";
@@ -37,4 +40,20 @@ test("next saves the phase and --resume logs a resume event", () => {
 
 test("an unknown command lists the available ones", () => {
   assert.match(runCli("nope").err, /Commands: init, list, status, next/);
+});
+
+test("list reports a broken run next to the valid ones (F12)", () => {
+  const good = initRun("good");
+  const broken = initRun("broken");
+  writeFileSync(statePath(broken), "{ not json");
+  const result = runCli("list");
+  assert.equal(result.code, 0);
+  const runs: unknown = JSON.parse(result.out);
+  assert.ok(Array.isArray(runs));
+  assert.match(JSON.stringify(runs), new RegExp(`"runId":"${good}","phase"`));
+  assert.match(JSON.stringify(runs), new RegExp(`"runId":"${broken}","error"`));
+});
+
+test("commands reject run ids that could leave runs/ (F10)", () => {
+  assert.match(runCli("status", "../escape").err, /Invalid run id/);
 });

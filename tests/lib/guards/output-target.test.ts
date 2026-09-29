@@ -41,3 +41,9 @@ test("ignores artifacts and other tools", () => {
   );
   assert.equal(target({ tool_name: "Read", tool_input: { file_path: "/p/runs/r1/output/event-plan.md" } }), null);
 });
+
+test("a shell write into the output folder itself is caught", () => {
+  assert.equal(target({ tool_name: "Bash", tool_input: { command: "cp plan.md runs/r5/output" } }), "r5");
+  assert.equal(target({ tool_name: "Bash", tool_input: { command: "cd runs/r6/output && echo x > a.md" } }), "r6");
+  assert.equal(target({ tool_name: "Bash", tool_input: { command: "cp plan.md runs/r7/outputs/x.md" } }), null);
+});

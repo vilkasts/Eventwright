@@ -6,8 +6,9 @@ import { runDirectory } from "@/io/paths";
 const LOCK_DIRECTORY = ".lock";
 const RETRY_DELAY_MS = 20;
 const LOCK_TIMEOUT_MS = 20_000;
-// A lock older than this was left by a crashed process: hooks and CLI calls finish in well under a second.
-const STALE_LOCK_MS = 30_000;
+// A lock older than this was left by a crashed process: hooks and CLI calls hold it for milliseconds.
+// It must be shorter than LOCK_TIMEOUT_MS, or a waiter gives up before it may break a crashed holder's lock.
+const STALE_LOCK_MS = 10_000;
 const SLEEP_CELL = new Int32Array(new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT));
 
 const sleep = (milliseconds: number): void => {

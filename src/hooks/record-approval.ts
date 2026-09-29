@@ -5,14 +5,23 @@ import { recordDecision } from "@/io/approval-store";
 import { nowIso } from "@/io/clock";
 import { blockPrompt, readHookInput, reportToContext, runHookSafely } from "@/io/hook-io";
 import { stateExists } from "@/io/state-store";
-import { parseApprovalCommand } from "@/lib/approval-command";
+import { isDecisionAttempt, parseApprovalCommand } from "@/lib/approval-command";
 import type { DecisionRequest } from "@/types/approval";
 
 const SOURCE = "record-approval";
 
 const recordApproval = async (): Promise<void> => {
-  const command = parseApprovalCommand((await readHookInput()).prompt ?? "");
-  if (command === null) return;
+  const prompt = (await readHookInput()).prompt ?? "";
+  const command = parseApprovalCommand(prompt);
+  if (command === null) {
+    if (isDecisionAttempt(prompt)) {
+      blockPrompt(
+        SOURCE,
+        "Usage: /approve-event <runId> (nothing after it) or /reject-event <runId> <what to change>.",
+      );
+    }
+    return;
+  }
   if (!stateExists(command.runId)) {
     blockPrompt(SOURCE, `Run '${command.runId}' not found. List runs: npm run -s wf -- list`);
   }
