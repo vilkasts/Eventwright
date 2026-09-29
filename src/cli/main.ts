@@ -1,10 +1,11 @@
 import process from "node:process";
 
 import type { CommandRegistry } from "@/cli/command";
+import { AGENT_COMMANDS } from "@/cli/commands/agent-commands";
 import { RUN_COMMANDS } from "@/cli/commands/run-commands";
 import { printError } from "@/io/output";
 
-const COMMANDS: CommandRegistry = { ...RUN_COMMANDS };
+const COMMANDS: CommandRegistry = { ...RUN_COMMANDS, ...AGENT_COMMANDS };
 const FAILURE_EXIT_CODE = 1;
 
 // CLI координатора: stdout — JSON для модели, ошибки — stderr и exit 1.

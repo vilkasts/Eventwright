@@ -57,7 +57,7 @@
 - [x] 2.1 Структурная проверка артефактов
 - [x] 2.2 Детерминированная проверка бюджета
 - [x] 3.1 CLI: `init`, `list`, `status`, `next`
-- [ ] 3.2 CLI: `start`, `lint`, `check`
+- [x] 3.2 CLI: `start`, `lint`, `check`
 - [ ] 3.3 CLI: `confirm-requirements`, `plan`, `budget`, `record-gates`, `invalidate`
 - [ ] 4.1 Разбор payload hooks + `state-integrity-guard`
 - [ ] 4.2 `post-write-state`
