@@ -9,9 +9,30 @@
   },
   "scripts": {
     "claude": "claude --mcp-config=.claude/mcp.json",
-    "mcp:weather": "node node_modules/open-meteo-mcp-server/dist/index.js"
+    "mcp:weather": "node node_modules/open-meteo-mcp-server/dist/index.js",
+    "mcp:holidays": "node node_modules/@pipeworx/mcp-holidays/bin/cli.js",
+    "wf": "node --import tsx src/cli/main.ts",
+    "test": "node --import tsx --test \"tests/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky"
   },
   "dependencies": {
+    "@pipeworx/mcp-holidays": "0.1.2",
     "open-meteo-mcp-server": "2.5.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.20.4",
+    "eslint": "^10.11.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.12.0",
+    "husky": "^9.1.7",
+    "prettier": "^3.9.9",
+    "tsx": "^4.23.15",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.71.0"
   }
 }

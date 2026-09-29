@@ -4,6 +4,8 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
+> **Продолжение работы:** состояние на 2026-09-29 и порядок оставшихся шагов — в `docs/superpowers/plans/2026-09-29-handoff.md`. Прочитать его первым.
+
 **Goal:** С нуля построить репозиторий **Eventwright**: агентный workflow для Claude Code, вызываемый командой `/plan-event <описание события>`. Workflow собирает и подтверждает требования, исследует погоду (Open-Meteo MCP), площадки, кейтеринг, развлечения и логистику (web search), сводит бюджет, проверяет всё quality gates с точечными повторами, получает детерминированно проверяемое одобрение человека и выдаёт `event-plan.html` + `event-plan.md`.
 
 **Architecture:** Hub-and-spoke. Координатор — slash-команда в главной сессии Claude Code, следует skill `workflow-orchestration`. Модель решает, **какие** subagents нужны: formalizer выводит из запроса строку `- Services:`, человек подтверждает требования, `wf plan` детерминированно применяет выбор. Следующий шаг вычисляет **код**: `nextAction()` по графу `src/config/dag.ts` и `runs/<runId>/workflow-state.json`. 10 subagents с одной ответственностью и одним артефактом каждый; 3 из них (catering, entertainment, logistics) необязательные. Независимые агенты запускаются параллельно (несколько вызовов Agent в одном сообщении), зависимые — последовательно. Состояние пишут только CLI (`npm run -s wf -- …`) и hooks. Одобрение фиксирует hook `UserPromptSubmit` по тексту, набранному человеком, и оно привязано к sha256 плана.
@@ -19,7 +21,7 @@
 ## Global Constraints
 
 - **Код — только TypeScript** по правилам `CLAUDE.md`: `.ts` в `src/` и `tests/`; `.js` только для конфигов инструментов (`eslint.config.js`). Импорты — только через alias `@/` (код) и `@tests/` (тестовые фикстуры), никогда `../`.
-- **Язык:** промпты агентов, skills, артефакты, итоговый документ, README, сообщения CLI и hooks — English. Комментарии в коде — по-русски, коротко и только там, где неочевидно «зачем». Запрос пользователя может быть на любом языке; имена собственные сохраняются как даны.
+- **Язык (обновлено 2026-09-29 по решению пользователя):** всё в репозитории — **English**: комментарии в коде (коротко и только там, где неочевидно «зачем»), документация (README, CLAUDE.md, `SCENARIO.md` демо-run), промпты агентов, skills, команды, шаблоны, артефакты, итоговый документ, сообщения CLI и hooks, сообщения коммитов. Исключение — только временные планы и handoff в `docs/superpowers/plans/` (могут быть по-русски). Запрос пользователя может быть на любом языке; имена собственные сохраняются как даны. Правило — `CLAUDE.md` → «Language».
 - Node `"engines": { "node": ">=22" }`. Сборки нет: `node --import tsx <file>.ts` из чистого checkout после `npm install`.
 - **Все настройки Claude Code, кроме `CLAUDE.md`, лежат в `.claude/`** (`settings.json`, `mcp.json`, `agents/`, `commands/`, `skills/`). Сессия запускается `npm run claude` (= `claude --mcp-config=.claude/mcp.json`). Hooks: `node --import tsx "${CLAUDE_PROJECT_DIR}/src/hooks/<name>.ts"`. **Не через `npx`**: на Windows `.cmd`-шимы без shell не запускаются.
 - Координатор и агенты меняют состояние только командой `npm run -s wf -- <command> …` (`-s` — чтобы stdout был чистым JSON).
@@ -43,36 +45,36 @@
 
 Отмечать `[x]` задачу целиком, когда все её шаги отмечены и коммит сделан.
 
-- [ ] 0.1 Каркас TypeScript и инструменты качества
-- [ ] 0.2 Open-Meteo MCP *(установка, `.claude/mcp.json` и smoke-тест уже сделаны — остались тест и коммит)*
-- [ ] 1.1 Доменные типы и граф DAG
-- [ ] 1.2 Запросы к графу и разбор путей
-- [ ] 1.3 Состояние run: запись артефактов и инвалидация
-- [ ] 1.4 Динамический выбор subagents (execution plan)
-- [ ] 1.5 Quality gates и точечные повторы
-- [ ] 1.6 Вычисление следующего шага `nextAction`
-- [ ] 1.7 Правила одобрения человеком
-- [ ] 1.8 Слой io: хранение состояния run
-- [ ] 1.9 Слой io: хранение одобрения
-- [ ] 2.1 Структурная проверка артефактов
-- [ ] 2.2 Детерминированная проверка бюджета
-- [ ] 3.1 CLI: `init`, `list`, `status`, `next`
-- [ ] 3.2 CLI: `start`, `lint`, `check`
-- [ ] 3.3 CLI: `confirm-requirements`, `plan`, `budget`, `record-gates`, `invalidate`
-- [ ] 4.1 Разбор payload hooks + `state-integrity-guard`
-- [ ] 4.2 `post-write-state`
-- [ ] 4.3 `record-approval`
-- [ ] 4.4 `approval-gate-guard`
-- [ ] 4.5 `no-leak-guard`
-- [ ] 4.6 `.claude/settings.json`
-- [ ] 5 Проверка MCP в Claude Code
-- [ ] 6 Skills (5 шт.)
-- [ ] 7 Subagents (10 шт.)
-- [ ] 8 Slash-команды координатора
-- [ ] 9 Smoke-проверка в живом Claude Code
+- [x] 0.1 Каркас TypeScript и инструменты качества
+- [x] 0.2 Open-Meteo MCP *(установка, `.claude/mcp.json` и smoke-тест уже сделаны — остались тест и коммит)*
+- [x] 1.1 Доменные типы и граф DAG
+- [x] 1.2 Запросы к графу и разбор путей
+- [x] 1.3 Состояние run: запись артефактов и инвалидация
+- [x] 1.4 Динамический выбор subagents (execution plan)
+- [x] 1.5 Quality gates и точечные повторы
+- [x] 1.6 Вычисление следующего шага `nextAction`
+- [x] 1.7 Правила одобрения человеком
+- [x] 1.8 Слой io: хранение состояния run
+- [x] 1.9 Слой io: хранение одобрения
+- [x] 2.1 Структурная проверка артефактов
+- [x] 2.2 Детерминированная проверка бюджета
+- [x] 3.1 CLI: `init`, `list`, `status`, `next`
+- [x] 3.2 CLI: `start`, `lint`, `check`
+- [x] 3.3 CLI: `confirm-requirements`, `plan`, `budget`, `record-gates`, `invalidate`
+- [x] 4.1 Разбор payload hooks + `state-integrity-guard`
+- [x] 4.2 `post-write-state`
+- [x] 4.3 `record-approval`
+- [x] 4.4 `approval-gate-guard`
+- [x] 4.5 `no-leak-guard`
+- [x] 4.6 `.claude/settings.json`
+- [x] 5 Проверка MCP в Claude Code
+- [x] 6 Skills (5 шт.)
+- [x] 7 Subagents (10 шт.)
+- [x] 8 Slash-команды координатора
+- [ ] 9 Smoke-проверка в живом Claude Code *(поля payload, guards, агенты и skills проверены 2026-09-29 — остались `/mcp`, `/hooks` и `/approve-event nope` человеком; см. 2026-09-29-handoff.md)*
 - [ ] 10 Сквозной отладочный прогон
 - [ ] 11 Демонстрационные run (4)
-- [ ] 12 CLAUDE.md (раздел workflow) и README.md
+- [ ] 12 CLAUDE.md (раздел workflow) и README.md *(написаны; осталось вписать runId демо-run в README)*
 - [ ] 13 Чистый checkout, DoD, push
 
 ## Где выполнять задачи: облако или локально
