@@ -59,7 +59,7 @@
 - [x] 3.1 CLI: `init`, `list`, `status`, `next`
 - [x] 3.2 CLI: `start`, `lint`, `check`
 - [x] 3.3 CLI: `confirm-requirements`, `plan`, `budget`, `record-gates`, `invalidate`
-- [ ] 4.1 Разбор payload hooks + `state-integrity-guard`
+- [x] 4.1 Разбор payload hooks + `state-integrity-guard`
 - [ ] 4.2 `post-write-state`
 - [ ] 4.3 `record-approval`
 - [ ] 4.4 `approval-gate-guard`
