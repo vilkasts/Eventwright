@@ -42,3 +42,29 @@ test("every saved demo run still loads", () => {
     assert.equal(isWorkflowState(raw), true, runId);
   }
 });
+
+// A fresh state as JSON would bring it, with one top-level field replaced.
+const withField = (field: string, value: unknown): unknown => {
+  const state: unknown = JSON.parse(JSON.stringify(createInitialState("run-1", NOW)));
+  if (typeof state !== "object" || state === null) throw new Error("fixture: state is not an object");
+  Reflect.set(state, field, value);
+  return state;
+};
+
+test("rejects fields that are narrower in the type than a plain string or array (M6)", () => {
+  assert.equal(isWorkflowState(withField("phase", "dancing")), false);
+  const failure = { kind: "gate", gate: "G99-nope", findings: [], attempts: 4, at: NOW };
+  assert.equal(isWorkflowState(withField("failure", failure)), false);
+  assert.equal(isWorkflowState(withField("failure", { ...failure, kind: "agent", agent: "nobody" })), false);
+  const plan = { services: ["venue", "fireworks"], selected: [], skipped: [], at: NOW };
+  assert.equal(isWorkflowState(withField("plan", plan)), false);
+  assert.equal(isWorkflowState(withField("log", [{ at: NOW, event: "init" }])), false);
+});
+
+test("accepts a known phase, a failure naming a real gate and a plan of known services", () => {
+  assert.equal(isWorkflowState(withField("phase", "await-approval")), true);
+  const failure = { kind: "gate", gate: "G7-budget-within-limit", findings: ["over"], attempts: 4, at: NOW };
+  assert.equal(isWorkflowState(withField("failure", failure)), true);
+  const plan = { services: ["venue", "catering"], selected: ["venue-scout"], skipped: [], at: NOW };
+  assert.equal(isWorkflowState(withField("plan", plan)), true);
+});

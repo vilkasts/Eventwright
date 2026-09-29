@@ -1,16 +1,26 @@
-import { SCHEMA_VERSION } from "@/config/workflow";
+import { SCHEMA_VERSION, VENUE_SERVICE } from "@/config/workflow";
 import { isAgentName } from "@/lib/dag-queries";
 import { isOneOf, isRecord } from "@/lib/narrow";
-import { AGENT_NAMES, AGENT_STATUSES, GATE_IDS, GATE_STATUSES } from "@/types/workflow";
-import type { WorkflowState } from "@/types/workflow";
+import { isCount, isListOf, isString, isStringOrNull } from "@/lib/schemas/primitives";
+import { AGENT_NAMES, AGENT_STATUSES, GATE_IDS, GATE_STATUSES, SERVICES } from "@/types/workflow";
+import type { ActionName, RequestedService, WorkflowState } from "@/types/workflow";
 
-const FAILURE_KINDS = ["gate", "agent"] as const;
+const REQUESTED_SERVICES: readonly RequestedService[] = [VENUE_SERVICE, ...SERVICES];
+// A record over every phase: adding an action to the Action type without listing it here is a compile error.
+const PHASES: Readonly<Record<ActionName | "init", true>> = {
+  init: true,
+  failed: true,
+  check: true,
+  run: true,
+  clarify: true,
+  plan: true,
+  validate: true,
+  "record-gates": true,
+  "await-approval": true,
+  done: true,
+};
 
-const isCount = (value: unknown): boolean => typeof value === "number" && Number.isInteger(value) && value >= 0;
-const isString = (value: unknown): boolean => typeof value === "string";
-const isStringOrNull = (value: unknown): boolean => value === null || typeof value === "string";
-const isListOf = (value: unknown, isItem: (item: unknown) => boolean): boolean =>
-  Array.isArray(value) && value.every(isItem);
+const isPhase = (value: unknown): boolean => typeof value === "string" && Object.hasOwn(PHASES, value);
 
 const hasEntries = (value: unknown, keys: readonly string[], isEntry: (entry: unknown) => boolean): boolean =>
   isRecord(value) && keys.every((key) => isEntry(value[key]));
@@ -47,18 +57,25 @@ const isValidationRecord = (value: unknown): boolean =>
 const isExecutionPlan = (value: unknown): boolean =>
   value === null ||
   (isRecord(value) &&
-    isListOf(value.services, isString) &&
+    isListOf(value.services, (service) => isOneOf(REQUESTED_SERVICES, service)) &&
     isListOf(value.selected, isAgentName) &&
     isListOf(value.skipped, isAgentName) &&
     isString(value.at));
 
+// A failure names the blocked gate or the agent that kept failing.
+const isFailureSubject = (value: Record<string, unknown>): boolean =>
+  value.kind === "gate" ? isOneOf(GATE_IDS, value.gate) : value.kind === "agent" && isAgentName(value.agent);
+
 const isFailure = (value: unknown): boolean =>
   value === null ||
   (isRecord(value) &&
-    isOneOf(FAILURE_KINDS, value.kind) &&
+    isFailureSubject(value) &&
     isListOf(value.findings, isString) &&
     isCount(value.attempts) &&
     isString(value.at));
+
+const isLogEntry = (value: unknown): boolean =>
+  isRecord(value) && isString(value.at) && isString(value.event) && isRecord(value.details);
 
 // State from disk is validated before use: a broken or foreign file gives a clear error instead of a crash later.
 export const isWorkflowState = (value: unknown): value is WorkflowState =>
@@ -67,11 +84,11 @@ export const isWorkflowState = (value: unknown): value is WorkflowState =>
   isString(value.runId) &&
   isString(value.createdAt) &&
   isString(value.updatedAt) &&
-  isString(value.phase) &&
+  isPhase(value.phase) &&
   typeof value.requirementsConfirmed === "boolean" &&
   isExecutionPlan(value.plan) &&
   isFailure(value.failure) &&
   hasEntries(value.agents, AGENT_NAMES, isAgentState) &&
   hasEntries(value.gates, GATE_IDS, isGateState) &&
   hasEntries(value.validation, ["domain", "final"], isValidationRecord) &&
-  Array.isArray(value.log);
+  isListOf(value.log, isLogEntry);

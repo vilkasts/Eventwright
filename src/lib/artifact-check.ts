@@ -42,7 +42,7 @@ const moneyIssues = (text: string, labels: readonly string[]): string[] =>
   labels
     .filter((label) => {
       const value = new RegExp(`^\\s*- ${escapeRegExp(label)}:(.*)$`, "m").exec(text)?.[1]?.trim();
-      if (value === undefined || value === UNKNOWN_VALUE) return false;
+      if (value === undefined || value.toLowerCase() === UNKNOWN_VALUE) return false;
       return parseMoney(`- ${label}: ${value}`, label) === null;
     })
     .map(

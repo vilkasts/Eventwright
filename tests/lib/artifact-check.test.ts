@@ -73,7 +73,8 @@ describe("money lines", () => {
     assert.match(issuesOf(VALID.replace("2400 EUR", "2,400 EUR"), MONEY_RULES), /'- Catering cost:' must be/);
     assert.match(issuesOf(VALID.replace("2400 EUR", "€2400"), MONEY_RULES), /'- Catering cost:' must be/);
   });
-  test("accept 'unknown' in a draft", () => {
+  test("accept 'unknown' in a draft, in any letter case", () => {
     assert.deepEqual(checkArtifact(VALID.replace("2400 EUR", "unknown"), MONEY_RULES), []);
+    assert.deepEqual(checkArtifact(VALID.replace("2400 EUR", "Unknown"), MONEY_RULES), []);
   });
 });

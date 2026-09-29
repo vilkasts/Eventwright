@@ -12,10 +12,11 @@ export const readHookInput = async (): Promise<HookInput> => {
 };
 
 // PreToolUse denial per the Claude Code contract: JSON with permissionDecision and exit 0.
-export const denyToolUse = (reason: string): never => {
+// No process.exit: on macOS a pipe write is asynchronous and could be cut off, and a truncated
+// answer would let the tool run. The hook ends on its own once stdout is flushed.
+const denyToolUse = (reason: string): void => {
   const decision = { hookEventName: "PreToolUse", permissionDecision: "deny", permissionDecisionReason: reason };
   process.stdout.write(JSON.stringify({ hookSpecificOutput: decision }));
-  process.exit(0);
 };
 
 // UserPromptSubmit block: exit 2, the message reaches the human via stderr.
