@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{TITLE}}</title>
+    <style>
+      :root {
+        --bg: #f6f5f2;
+        --card: #ffffff;
+        --text: #1c1c1e;
+        --muted: #6a6a70;
+        --accent: #b4532a;
+        --border: #e4e1da;
+        --soft: #fbf3ee;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #141414;
+          --card: #1e1e20;
+          --text: #ededee;
+          --muted: #a2a2a8;
+          --accent: #f0915f;
+          --border: #2d2d31;
+          --soft: #2a211c;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font:
+          16px/1.6 system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+      }
+      header,
+      nav,
+      main,
+      footer {
+        max-width: 960px;
+        margin: 0 auto;
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+      header {
+        padding-top: 40px;
+        padding-bottom: 20px;
+      }
+      header h1 {
+        margin: 0 0 6px;
+        font-size: clamp(24px, 4vw, 36px);
+      }
+      header p {
+        margin: 0;
+        color: var(--muted);
+      }
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding-bottom: 16px;
+      }
+      nav a {
+        color: var(--accent);
+        text-decoration: none;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 4px 12px;
+        font-size: 14px;
+      }
+      main {
+        display: grid;
+        gap: 16px;
+        padding-bottom: 48px;
+      }
+      section {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 20px 24px;
+      }
+      section h2 {
+        margin: 0 0 12px;
+        font-size: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        display: block;
+        overflow-x: auto;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 8px 10px;
+        border-bottom: 1px solid var(--border);
+      }
+      th {
+        color: var(--muted);
+        font-weight: 600;
+      }
+      tr.total td {
+        font-weight: 700;
+        background: var(--soft);
+      }
+      li {
+        margin: 6px 0;
+      }
+      a {
+        color: var(--accent);
+      }
+      footer {
+        color: var(--muted);
+        font-size: 13px;
+        padding-bottom: 32px;
+      }
+      @media print {
+        nav {
+          display: none;
+        }
+        section {
+          break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>{{TITLE}}</h1>
+      <p>{{SUBTITLE}}</p>
+    </header>
+    <nav>
+      <a href="#overview">Overview</a><a href="#weather">Weather</a><a href="#venue">Venue</a><a href="#menu">Menu</a
+      ><a href="#program">Program</a><a href="#run-of-show">Run of Show</a><a href="#checklist">Checklist</a
+      ><a href="#budget">Budget</a><a href="#sources">Sources</a>
+    </nav>
+    <main>
+      <section id="overview">
+        <h2>Overview</h2>
+        {{OVERVIEW}}
+      </section>
+      <section id="weather">
+        <h2>Weather &amp; Plan B</h2>
+        {{WEATHER}}
+      </section>
+      <section id="venue">
+        <h2>Venue</h2>
+        {{VENUE}}
+      </section>
+      <section id="menu">
+        <h2>Menu</h2>
+        {{MENU}}
+      </section>
+      <section id="program">
+        <h2>Program</h2>
+        {{PROGRAM}}
+      </section>
+      <section id="run-of-show">
+        <h2>Run of Show</h2>
+        {{RUN_OF_SHOW}}
+      </section>
+      <section id="checklist">
+        <h2>Preparation Checklist</h2>
+        {{CHECKLIST}}
+      </section>
+      <section id="budget">
+        <h2>Budget</h2>
+        {{BUDGET}}
+      </section>
+      <section id="sources">
+        <h2>Sources</h2>
+        {{SOURCES}}
+      </section>
+    </main>
+    <footer>Generated {{GENERATED_AT}} · Plan approved by the organizer</footer>
+  </body>
+</html>
