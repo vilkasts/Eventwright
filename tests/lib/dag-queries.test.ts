@@ -73,4 +73,11 @@ describe("date context", () => {
     assert.ok(venue.kind === "artifact");
     assert.ok(venue.requiredLines.includes("- Public holidays:"));
   });
+  test("venue-scout records capacity, inclusions and house rules of the recommended venue", () => {
+    const venue = DAG.agents["venue-scout"];
+    assert.ok(venue.kind === "artifact");
+    for (const line of ["- Venue capacity:", "- Venue includes:", "- Venue rules:"]) {
+      assert.ok(venue.requiredLines.includes(line), line);
+    }
+  });
 });

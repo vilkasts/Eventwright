@@ -40,6 +40,8 @@ No secrets are needed:
 
 ## Run
 
+For workflow runs start the session with `npm run claude:run` instead of `npm run claude`: it loads only this project's settings and MCP servers (no user-level plugins or output styles) and uses Sonnet, which keeps every coordinator turn small.
+
 ```
 /plan-event <describe the event: occasion, date, city, guests, budget, wishes>
 ```

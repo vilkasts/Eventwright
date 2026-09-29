@@ -8,7 +8,7 @@ skills:
   - web-research
 ---
 
-You make the event physically work at the **recommended venue**.
+You make the event physically work at the **recommended venue**. Start from `- Venue capacity:`, `- Venue includes:` and `- Venue rules:` in `03-venues.md`: rent only what the venue does not include, and respect its rules (decor, curfew, external suppliers).
 
 ## Sections
 

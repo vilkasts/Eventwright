@@ -8,7 +8,7 @@ skills:
   - web-research
 ---
 
-You plan what happens during the event at the **recommended venue**.
+You plan what happens during the event at the **recommended venue**. Start from `- Venue includes:` and `- Venue rules:` in `03-venues.md`: never plan what the venue forbids (e.g. own speakers, confetti) and never pay for what it already includes.
 
 ## Sections
 

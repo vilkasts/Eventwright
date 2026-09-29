@@ -17,6 +17,7 @@ Eventwright is an agentic event-planning workflow for Claude Code: a `/plan-even
 ```bash
 npm install                      # once, after clone
 npm run claude                   # start Claude Code with the project MCP servers (.claude/mcp.json)
+npm run claude:run               # lean session for workflow runs: project settings and MCP only, Sonnet
 npm test                         # all node:test suites
 node --import tsx --test tests/lib/next-action.test.ts   # a single test file
 npm run typecheck                # tsc --noEmit
@@ -159,10 +160,10 @@ tests/
 
 ## Tooling
 
-- **All Claude Code configuration lives in `.claude/`** (`settings.json`, `mcp.json`, `agents/`, `commands/`, `skills/`); only `CLAUDE.md` stays in the root. Claude Code auto-discovers project MCP servers only in a root `.mcp.json`, so the session is started with `npm run claude` (= `claude --mcp-config=.claude/mcp.json`) from the repository root.
+- **All Claude Code configuration lives in `.claude/`** (`settings.json`, `mcp.json`, `agents/`, `commands/`, `skills/`); only `CLAUDE.md` stays in the root. Claude Code auto-discovers project MCP servers only in a root `.mcp.json`, so the session is started with `npm run claude` (= `claude --mcp-config=.claude/mcp.json`) from the repository root. For workflow runs use `npm run claude:run`: it adds `--setting-sources project,local` (no user-level plugins, output styles or other MCP servers in every coordinator turn), `--strict-mcp-config` and `--model sonnet`.
 - Node ≥ 22, TypeScript 6.0 (`typescript-eslint` supports `<6.1`). TypeScript runs without a build step through `tsx`: `node --import tsx <file>.ts`; the workflow CLI is `npm run -s wf -- <command>` (`-s` keeps stdout pure JSON). `.claude/settings.json` calls hooks the same way. Never through `npx` (Windows `.cmd` shims do not start without a shell).
 - `npm run typecheck` (`tsc --noEmit`), `npm run lint` (ESLint 10 + `typescript-eslint` strict and stylistic type-checked), `npm run format` (Prettier 3, `printWidth: 120`), `npm test` (`node --import tsx --test "tests/**/*.test.ts"`).
 - Tests: `node:test` + `node:assert/strict`; narrow optional values with `assert.ok(value)` before using them; CLI and hooks are tested as real processes (`tests/support/run-cli.ts`, `tests/support/run-hook.ts`).
 - Run `npm run format` before every commit; the Husky pre-commit hook runs lint, format check, typecheck and tests.
 - Never format or hand-edit `runs/**`: approval is bound to artifact sha256 hashes.
-- **Cloud sessions** (claude.ai/code, `claude --cloud`) clone the repo onto a Linux VM; the `SessionStart` hook in `.claude/settings.json` runs `npm ci` there (only when `CLAUDE_CODE_REMOTE=true`). The project MCP servers (Open-Meteo, holidays) are not available in the cloud (they are loaded only via `--mcp-config`), so live workflow runs happen locally with `npm run claude`.
+- **Cloud sessions** (claude.ai/code, `claude --cloud`) clone the repo onto a Linux VM; the `SessionStart` hook in `.claude/settings.json` runs `npm ci` there (only when `CLAUDE_CODE_REMOTE=true`). The project MCP servers (Open-Meteo, holidays) are not available in the cloud (they are loaded only via `--mcp-config`), so live workflow runs happen locally with `npm run claude:run`.
