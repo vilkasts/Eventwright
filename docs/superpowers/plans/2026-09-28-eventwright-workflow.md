@@ -74,7 +74,7 @@
 - [x] 9 Smoke-проверка в живом Claude Code
 - [x] 10 Сквозной отладочный прогон
 - [x] 11 Демонстрационные run (4)
-- [ ] 12 CLAUDE.md (раздел workflow) и README.md *(написаны; осталось вписать runId демо-run в README)*
+- [x] 12 CLAUDE.md (раздел workflow) и README.md
 - [ ] 13 Чистый checkout, DoD, push
 
 ## Где выполнять задачи: облако или локально

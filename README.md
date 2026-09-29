@@ -8,7 +8,7 @@ Rooftop or garden restaurant, live acoustic music, 3 vegetarians and 1 gluten-fr
 one guest uses a wheelchair.
 ```
 
-Output: `runs/<runId>/output/event-plan.html` and `event-plan.md` with the same nine sections every time — Overview · Weather & Plan B · Venue · Menu · Program · Run of Show · Preparation Checklist · Budget · Sources.
+Output: `runs/<runId>/output/event-plan.html` and `event-plan.md` ([example](runs/2026-09-29-lisbon-40th-birthday/output/event-plan.html)) with the same nine sections every time — Overview · Weather & Plan B · Venue · Menu · Program · Run of Show · Preparation Checklist · Budget · Sources.
 
 ## Prerequisites
 
@@ -89,14 +89,14 @@ runs/<runId>/
 
 ## Sample runs
 
-Four saved runs with inputs, artifacts and state are in `runs/`, each with a `SCENARIO.md`:
+Four saved runs with inputs, artifacts, validator reports, state and approvals are in `runs/`. Each has a `SCENARIO.md` with the goal, what the human did and the key events from its log.
 
-| Run | Scenario                                                                                          |
-| --- | ------------------------------------------------------------------------------------------------- |
-| A   | Happy path — climatology weather, parallel planners, approved at once                             |
-| B   | Clarifying questions, a rejection that changes the venue, regeneration, second approval           |
-| C   | Catering not requested (agent skipped), session interrupted and resumed, forecast weather         |
-| D   | Budget cannot be met — the budget gate is blocked after 3 retries and the run stops with a report |
+| Run | Folder                                                                                                | Scenario                                                                                                                                                                     | Result                                                                                        |
+| --- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| A   | [`2026-09-29-lisbon-40th-birthday`](runs/2026-09-29-lisbon-40th-birthday/SCENARIO.md)                 | Happy path: 10-year climatology, three planners in parallel, targeted retries after G2 and G7, approved at once                                                              | done — [event-plan.html](runs/2026-09-29-lisbon-40th-birthday/output/event-plan.html)         |
+| B   | [`2026-09-29-new-year-team-party`](runs/2026-09-29-new-year-team-party/SCENARIO.md)                   | Almost empty request → clarifying questions; session interrupted and resumed; rejection ("second venue, photo booth") → upstream invalidation, regeneration, second approval | done — [event-plan.html](runs/2026-09-29-new-year-team-party/output/event-plan.html)          |
+| C   | [`2026-09-29-kids-birthday-barcelona-park`](runs/2026-09-29-kids-birthday-barcelona-park/SCENARIO.md) | Catering not requested → planner skipped, G5 `n/a`; forecast weather; indoor venue after an `indoor-recommended` verdict                                                     | done — [event-plan.html](runs/2026-09-29-kids-birthday-barcelona-park/output/event-plan.html) |
+| D   | [`2026-09-29-paris-wedding-150-chateau`](runs/2026-09-29-paris-wedding-150-chateau/SCENARIO.md)       | 150-guest château wedding for 5000 EUR: the budget gate fails 4 times, is blocked and the run stops with a report                                                            | failed — no plan, no approval, no output (by design)                                          |
 
 ## How it works
 
