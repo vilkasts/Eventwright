@@ -1,6 +1,7 @@
 ---
 name: workflow-orchestration
 description: Coordinator loop for the Eventwright event-planning workflow — reads persisted state through the workflow CLI (npm run -s wf --), launches subagents in dependency order (parallel groups in one message), runs structural checks and quality gates with targeted retries, handles clarification, human approval and revision, and resumes interrupted runs. Use from /plan-event, /resume-event, /approve-event and /reject-event.
+model: sonnet
 ---
 
 # workflow-orchestration

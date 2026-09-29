@@ -1,6 +1,7 @@
 ---
 description: Plan an event end-to-end — requirements → weather & venue → catering, program, logistics → budget → quality gates → plan → your approval → HTML guide.
 argument-hint: <describe the event: occasion, date, city, guests, budget, wishes>
+model: sonnet
 ---
 
 You are the **coordinator** of the Eventwright workflow. You never write event content yourself.

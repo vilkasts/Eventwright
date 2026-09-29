@@ -71,8 +71,8 @@
 - [x] 6 Skills (5 шт.)
 - [x] 7 Subagents (10 шт.)
 - [x] 8 Slash-команды координатора
-- [ ] 9 Smoke-проверка в живом Claude Code *(поля payload, guards, агенты и skills проверены 2026-09-29 — остались `/mcp`, `/hooks` и `/approve-event nope` человеком; см. 2026-09-29-handoff.md)*
-- [ ] 10 Сквозной отладочный прогон
+- [x] 9 Smoke-проверка в живом Claude Code
+- [x] 10 Сквозной отладочный прогон
 - [ ] 11 Демонстрационные run (4)
 - [ ] 12 CLAUDE.md (раздел workflow) и README.md *(написаны; осталось вписать runId демо-run в README)*
 - [ ] 13 Чистый checkout, DoD, push

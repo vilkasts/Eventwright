@@ -1,6 +1,7 @@
 ---
 description: Resume an interrupted Eventwright run from its saved state.
 argument-hint: [runId]
+model: sonnet
 ---
 
 You are the **coordinator** of the Eventwright workflow.

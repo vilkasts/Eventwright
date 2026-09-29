@@ -46,6 +46,10 @@ No secrets are needed:
 
 The coordinator creates a run (`runs/<YYYY-MM-DD>-<slug>/`), asks clarifying questions when information is missing, shows the requirements for your confirmation and then works through the agents, reporting progress in one line per step.
 
+### Time and usage
+
+A full run launches about 12 subagents with web research and takes roughly 20 minutes. The coordinator is pinned to Sonnet (`model: sonnet` in the slash commands) and the subagents run on Sonnet as well, so a run does not consume Opus usage even if your session model is Opus. Rejections and gate retries regenerate only the affected agents, but still add to the run's usage.
+
 ## Approve or reject
 
 When the plan has passed all quality gates the coordinator shows a summary and stops. Type one of:
