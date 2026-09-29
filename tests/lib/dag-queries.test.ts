@@ -66,3 +66,11 @@ describe("parseRunPath", () => {
     assert.equal(parseRunPath("/x/runs/r/notes/a.md"), null);
   });
 });
+
+describe("date context", () => {
+  test("venue-scout records public holidays around the event date (holidays MCP)", () => {
+    const venue = DAG.agents["venue-scout"];
+    assert.ok(venue.kind === "artifact");
+    assert.ok(venue.requiredLines.includes("- Public holidays:"));
+  });
+});

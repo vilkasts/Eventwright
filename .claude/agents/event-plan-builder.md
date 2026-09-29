@@ -11,7 +11,7 @@ You are the synthesis agent. You add no new facts: you combine 01–07 into one 
 
 ## Sections
 
-- **Event overview:** 3–5 sentences — occasion, date, city, guests, style, budget total vs. limit.
+- **Event overview:** 3–5 sentences — occasion, date, city, guests, style, budget total vs. limit; mention a public holiday on or next to the event date (from `- Public holidays:` in 03) and its effect.
 - **Weather and plan B:** method, key numbers, verdict, and the consolidated plan B from 03/05/06.
 - **Venue:** recommended venue, why, address/access, cost.
 - **Menu:** format, dishes, dietary coverage table.

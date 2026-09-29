@@ -4,7 +4,7 @@ const HEAD_SECTIONS = ["Meta", "Summary"];
 const TAIL_SECTIONS = ["Sources", "Open questions"];
 const SECTION_PREFIX = "## ";
 const TITLE_PREFIX = "# ";
-const CITATION = /(https?:\/\/\S+|open-meteo:[a-z_]+|user-input)/;
+const CITATION = /(https?:\/\/\S+|(?:open-meteo|holidays):[a-z_]+|user-input)/;
 const PLACEHOLDER = /\b(?:TODO|TBD|FIXME)\b|\?\?\?|<(?:runId|agent name|Artifact title)[^>\n]*>/;
 const REQUIREMENT_ID = /\bR-\d{2}\b/g;
 
@@ -44,7 +44,8 @@ export const checkArtifact = (text: string, rules: ArtifactRules): string[] => {
   if (!lines[0]?.startsWith(TITLE_PREFIX)) issues.unshift("The first line must be a '# ' title.");
   const missingLines = rules.requiredLines.filter((prefix) => !lines.some((line) => line.trim().startsWith(prefix)));
   issues.push(...missingLines.map((prefix) => `Missing required line starting with '${prefix}'.`));
-  if (!hasCitation(lines)) issues.push("'## Sources' has no citation (URL, open-meteo:<tool> or user-input).");
+  if (!hasCitation(lines))
+    issues.push("'## Sources' has no citation (URL, open-meteo:<tool>, holidays:<tool> or user-input).");
   if (PLACEHOLDER.test(text)) issues.push("The artifact still contains placeholders (TODO/TBD/???/template <…>).");
   const missing = (rules.requirementIds ?? []).filter((id) => !text.includes(id));
   if (missing.length > 0) issues.push(`Requirements not addressed: ${missing.join(", ")}.`);

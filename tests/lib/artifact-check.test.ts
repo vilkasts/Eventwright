@@ -56,3 +56,7 @@ test("reports uncovered requirement ids", () => {
 test("extractRequirementIds returns unique sorted ids", () => {
   assert.deepEqual(extractRequirementIds("- R-02: x\n- R-01 [MUST]: y\nsee R-02"), ["R-01", "R-02"]);
 });
+test("accepts an MCP tool citation from the holidays server", () => {
+  const cited = VALID.replace("- https://example.com/menu — menu prices", "- holidays:get_holidays — PT, 2027");
+  assert.deepEqual(checkArtifact(cited, RULES), []);
+});

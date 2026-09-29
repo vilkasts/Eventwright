@@ -22,3 +22,10 @@ test("catches tool names, run paths and state files", () => {
 test("allows clean user-facing text", () => {
   assert.deepEqual(findLeaks("Venue: Rooftop 360. Weather source: Open-Meteo historical weather (2016–2025)."), []);
 });
+
+test("catches holidays MCP tool references", () => {
+  assert.deepEqual(findLeaks("Source: holidays:get_holidays and mcp__holidays__get_holidays"), [
+    "mcp__holidays__get_holidays",
+    "holidays:get_holidays",
+  ]);
+});

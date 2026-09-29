@@ -41,3 +41,10 @@ test("settings.json registers every hook script through tsx", () => {
     assert.ok(existsSync(path.join(ROOT, script)), command);
   }
 });
+
+test("both project MCP servers are allowed without prompts", () => {
+  const settings: unknown = JSON.parse(readFileSync(path.join(ROOT, ".claude", "settings.json"), "utf8"));
+  const permissions = isRecord(settings) && isRecord(settings.permissions) ? settings.permissions : {};
+  const allowed = listOf(permissions.allow);
+  for (const server of ["mcp__open-meteo", "mcp__holidays"]) assert.ok(allowed.includes(server), server);
+});

@@ -33,6 +33,7 @@ Required lines: `src/config/dag.ts → DAG.agents["<name>"].requiredLines` must 
 
 - Every venue, vendor, price or factual claim from the web → a `## Sources` bullet: `- https://… — what was taken (accessed YYYY-MM-DD)`. Only URLs you actually opened (WebFetch) or got from WebSearch. Never invent URLs.
 - Weather figures → `- open-meteo:<tool> — lat, lon, period`.
+- Holidays → `- holidays:get_holidays — <country code>, <year>`.
 - Facts from the user → `- user-input — original request` / `- user-input — clarification round N`.
 - `## Open questions`: `None` or a list. Do not leave questions you could have resolved from your inputs.
 - Forbidden: TODO, TBD, FIXME, `???`, unfilled `<…>` template tokens, and the `|` character inside table cells.

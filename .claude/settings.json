@@ -1,6 +1,6 @@
 {
   "permissions": {
-    "allow": ["mcp__open-meteo", "Bash(npm run -s wf -- *)", "WebSearch", "WebFetch"]
+    "allow": ["mcp__open-meteo", "mcp__holidays", "Bash(npm run -s wf -- *)", "WebSearch", "WebFetch"]
   },
   "hooks": {
     "SessionStart": [

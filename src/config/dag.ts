@@ -38,7 +38,7 @@ export const DAG: Dag = {
       deps: ["requirements-formalizer", "weather-analyst"],
       stage: "domain",
       sections: ["Shortlist", "Recommendation", "Accessibility and logistics"],
-      requiredLines: ["- Recommended venue:", "- Venue cost:"],
+      requiredLines: ["- Recommended venue:", "- Venue cost:", "- Public holidays:"],
     },
     "catering-planner": {
       kind: "artifact",

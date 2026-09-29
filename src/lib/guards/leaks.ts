@@ -10,7 +10,7 @@ const LEAK_PATTERNS: readonly RegExp[] = [
   /approval\.json/g,
   /\bruns\/[\w-]+/g,
   /\bmcp__[\w-]+/g,
-  /\bopen-meteo:[a-z_]+/g,
+  /\b(?:open-meteo|holidays):[a-z_]+/g,
   ...[...AGENT_NAMES, VALIDATOR_NAME].map((name) => new RegExp(`\\b${escapeRegExp(name)}\\b`, "g")),
 ];
 

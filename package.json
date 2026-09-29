@@ -10,6 +10,7 @@
   "scripts": {
     "claude": "claude --mcp-config=.claude/mcp.json",
     "mcp:weather": "node node_modules/open-meteo-mcp-server/dist/index.js",
+    "mcp:holidays": "node node_modules/@pipeworx/mcp-holidays/bin/cli.js",
     "wf": "node --import tsx src/cli/main.ts",
     "test": "node --import tsx --test \"tests/**/*.test.ts\"",
     "typecheck": "tsc --noEmit",
@@ -19,6 +20,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@pipeworx/mcp-holidays": "0.1.2",
     "open-meteo-mcp-server": "2.5.0"
   },
   "devDependencies": {
