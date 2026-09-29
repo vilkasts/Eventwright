@@ -62,7 +62,7 @@
 - [x] 4.1 Разбор payload hooks + `state-integrity-guard`
 - [x] 4.2 `post-write-state`
 - [x] 4.3 `record-approval`
-- [ ] 4.4 `approval-gate-guard`
+- [x] 4.4 `approval-gate-guard`
 - [ ] 4.5 `no-leak-guard`
 - [ ] 4.6 `.claude/settings.json`
 - [ ] 5 Проверка MCP в Claude Code
