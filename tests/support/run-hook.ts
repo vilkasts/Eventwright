@@ -1,4 +1,4 @@
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { writeFileSync } from "node:fs";
 import path from "node:path";
 
@@ -36,6 +36,23 @@ export const runHook = (name: string, payload: unknown): HookResult => {
     decision: permissionDecision(result.stdout),
   };
 };
+
+// Several hooks at once, like the PostToolUse hooks of one parallel group of agents.
+export const runHooksConcurrently = (name: string, payloads: readonly unknown[]): Promise<number[]> =>
+  Promise.all(
+    payloads.map(
+      (payload) =>
+        new Promise<number>((resolve) => {
+          const child = spawn(process.execPath, ["--import", "tsx", path.join(HOOKS_DIRECTORY, `${name}.ts`)], {
+            env: { ...process.env },
+          });
+          child.on("close", (code) => {
+            resolve(code ?? -1);
+          });
+          child.stdin.end(JSON.stringify(payload));
+        }),
+    ),
+  );
 
 export const setupRun = (): void => {
   useTempProject();

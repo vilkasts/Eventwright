@@ -2,7 +2,7 @@
 import { nowIso } from "@/io/clock";
 import { sha256OfFile } from "@/io/files";
 import { readHookInput } from "@/io/hook-io";
-import { loadState, saveState, stateExists } from "@/io/state-store";
+import { stateExists, updateState } from "@/io/state-store";
 import { parseRunPath } from "@/lib/run-path";
 import { recordArtifactWrite } from "@/lib/state";
 
@@ -14,9 +14,12 @@ const recordWrite = async (): Promise<void> => {
   if (location === null || !stateExists(location.runId)) return;
   const hash = sha256OfFile(input.filePath ?? "");
   if (hash === null) return;
-  const state = loadState(location.runId);
   const writer = input.agentType ?? COORDINATOR_WRITER;
-  if (recordArtifactWrite(state, location, hash, writer, nowIso())) saveState(state);
+  // Agents of one group finish together: the run lock keeps their concurrent updates from overwriting each other.
+  updateState(location.runId, (state) => ({
+    isChanged: recordArtifactWrite(state, location, hash, writer, nowIso()),
+    result: null,
+  }));
 };
 
 await recordWrite();

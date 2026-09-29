@@ -1,6 +1,7 @@
 import { PLAN_AGENT } from "@/config/workflow";
 import { fileExists, readJson, sha256OfFile, writeJsonAtomic } from "@/io/files";
 import { approvalPath, artifactPath } from "@/io/paths";
+import { withRunLock } from "@/io/run-lock";
 import { loadState, saveState } from "@/io/state-store";
 import { applyDecision } from "@/lib/approval";
 import { isApprovalCurrent } from "@/lib/approval-status";
@@ -21,10 +22,12 @@ export const readApproval = (runId: string): ApprovalFile | null => {
 export const isApproved = (runId: string): boolean =>
   isApprovalCurrent(readApproval(runId), sha256OfFile(planFilePath(runId)));
 
-export const recordDecision = (runId: string, request: DecisionRequest, now: string): ApprovalRecord => {
-  const state = loadState(runId);
-  const approval = applyDecision(state, readApproval(runId), request, sha256OfFile(planFilePath(runId)), now);
-  writeJsonAtomic(approvalPath(runId), approval);
-  saveState(state, now);
-  return approval.current;
-};
+// approval.json and the state change together, under the same run lock as every other state update.
+export const recordDecision = (runId: string, request: DecisionRequest, now: string): ApprovalRecord =>
+  withRunLock(runId, () => {
+    const state = loadState(runId);
+    const approval = applyDecision(state, readApproval(runId), request, sha256OfFile(planFilePath(runId)), now);
+    writeJsonAtomic(approvalPath(runId), approval);
+    saveState(state, now);
+    return approval.current;
+  });

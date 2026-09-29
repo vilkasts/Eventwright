@@ -1,11 +1,10 @@
 import type { CommandRegistry } from "@/cli/command";
-import { requireRun } from "@/cli/require-run";
+import { requireRun, updateRun } from "@/cli/require-run";
 import { REQUIREMENTS_AGENT } from "@/config/workflow";
 import { nowIso } from "@/io/clock";
 import { fileExists, readText, readTextIfExists } from "@/io/files";
 import { printJson } from "@/io/output";
 import { artifactPath } from "@/io/paths";
-import { saveState } from "@/io/state-store";
 import { recordAgentStarts, recordStructureCheck, startedWithoutWriteIssues } from "@/lib/agent-runs";
 import { checkArtifact, extractRequirementIds } from "@/lib/artifact-check";
 import { artifactDefinition, parseAgentName, requireArtifactOf } from "@/lib/dag-queries";
@@ -37,10 +36,11 @@ const artifactIssues = (state: WorkflowState, name: AgentName): string[] => [
 // Agent starts and the structural gate after every group.
 export const AGENT_COMMANDS: CommandRegistry = {
   start: ([runId, ...names]) => {
-    const state = requireRun(runId);
     const agents = names.map(parseAgentName);
-    recordAgentStarts(state, agents, nowIso());
-    saveState(state);
+    updateRun(runId, (state) => {
+      recordAgentStarts(state, agents, nowIso());
+      return { isChanged: true, result: null };
+    });
     printJson({ ok: true, started: agents });
   },
 
@@ -53,11 +53,12 @@ export const AGENT_COMMANDS: CommandRegistry = {
   },
 
   check: ([runId, name = ""]) => {
-    const state = requireRun(runId);
     const agent = parseAgentName(name);
-    const issues = artifactIssues(state, agent);
-    recordStructureCheck(state, agent, issues, nowIso());
-    saveState(state);
+    const issues = updateRun(runId, (state) => {
+      const found = artifactIssues(state, agent);
+      recordStructureCheck(state, agent, found, nowIso());
+      return { isChanged: true, result: found };
+    });
     if (issues.length > 0) throw new Error(issues.join("\n"));
     printJson({ ok: true });
   },

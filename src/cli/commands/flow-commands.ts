@@ -1,11 +1,10 @@
 import type { CommandRegistry } from "@/cli/command";
-import { requireRun } from "@/cli/require-run";
+import { requireRun, updateRun } from "@/cli/require-run";
 import { BUDGET_AGENT, REQUIREMENTS_AGENT, STAGE_ORDER, validationFileName } from "@/config/workflow";
 import { nowIso } from "@/io/clock";
 import { fileExists, readText, readTextIfExists } from "@/io/files";
 import { printJson } from "@/io/output";
 import { artifactPath } from "@/io/paths";
-import { saveState } from "@/io/state-store";
 import { budgetStatus } from "@/lib/budget";
 import { parseAgentName, requireArtifactOf } from "@/lib/dag-queries";
 import { applyExecutionPlan, parseServices } from "@/lib/execution-plan";
@@ -27,21 +26,22 @@ const parseStage = (value: string | undefined): GatedStage => {
 // Workflow transitions: requirements confirmation, execution plan, gates, invalidation.
 export const FLOW_COMMANDS: CommandRegistry = {
   "confirm-requirements": ([runId]) => {
-    const state = requireRun(runId);
-    confirmRequirements(state, nowIso());
-    saveState(state);
+    updateRun(runId, (state) => {
+      confirmRequirements(state, nowIso());
+      return { isChanged: true, result: null };
+    });
     printJson({ ok: true });
   },
 
   plan: ([runId]) => {
-    const state = requireRun(runId);
-    if (!state.requirementsConfirmed)
-      throw new Error("Requirements are not confirmed yet — finish the clarify phase first.");
-    if (state.plan !== null) throw new Error(`Execution plan already set: ${state.plan.selected.join(", ")}`);
-    const services = parseServices(requirementsText(state.runId));
-    if (services === null) throw new Error(`${requireArtifactOf(REQUIREMENTS_AGENT)} lacks a '- Services: …' line.`);
-    const plan = applyExecutionPlan(state, services, nowIso());
-    saveState(state);
+    const plan = updateRun(runId, (state) => {
+      if (!state.requirementsConfirmed)
+        throw new Error("Requirements are not confirmed yet — finish the clarify phase first.");
+      if (state.plan !== null) throw new Error(`Execution plan already set: ${state.plan.selected.join(", ")}`);
+      const services = parseServices(requirementsText(state.runId));
+      if (services === null) throw new Error(`${requireArtifactOf(REQUIREMENTS_AGENT)} lacks a '- Services: …' line.`);
+      return { isChanged: true, result: applyExecutionPlan(state, services, nowIso()) };
+    });
     printJson(plan);
   },
 
@@ -53,17 +53,16 @@ export const FLOW_COMMANDS: CommandRegistry = {
   },
 
   "record-gates": ([runId, stageName]) => {
-    const state = requireRun(runId);
     const stage = parseStage(stageName);
-    const reportFile = artifactPath(state.runId, validationFileName(stage));
-    if (!fileExists(reportFile)) throw new Error(`No ${validationFileName(stage)} — run the validator first.`);
-    const summary = recordGates(state, stage, readText(reportFile), nowIso());
-    saveState(state);
+    const summary = updateRun(runId, (state) => {
+      const reportFile = artifactPath(state.runId, validationFileName(stage));
+      if (!fileExists(reportFile)) throw new Error(`No ${validationFileName(stage)} — run the validator first.`);
+      return { isChanged: true, result: recordGates(state, stage, readText(reportFile), nowIso()) };
+    });
     printJson(summary);
   },
 
   invalidate: ([runId, ...rest]) => {
-    const state = requireRun(runId);
     const flagIndex = rest.indexOf(FEEDBACK_FLAG);
     const names = flagIndex === -1 ? rest : rest.slice(0, flagIndex);
     const feedback =
@@ -77,8 +76,10 @@ export const FLOW_COMMANDS: CommandRegistry = {
       throw new Error("usage: invalidate <runId> <agent...> --feedback <text>");
     }
     const agents = names.map(parseAgentName);
-    const isChanged = invalidateAgents(state, agents, feedback, nowIso());
-    if (isChanged) saveState(state);
+    const isChanged = updateRun(runId, (state) => {
+      const changed = invalidateAgents(state, agents, feedback, nowIso());
+      return { isChanged: changed, result: changed };
+    });
     printJson({ ok: true, invalidated: agents, alreadyInvalidated: !isChanged });
   },
 };

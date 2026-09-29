@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { existsSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 
 import { sha256 } from "@/lib/hash";
@@ -21,8 +22,9 @@ export const sha256OfFile = (filePath: string): string | null =>
   existsSync(filePath) ? sha256(readFileSync(filePath)) : null;
 
 // Write through a temporary file: an interrupted process never leaves half a JSON file.
+// The temporary name is unique per call so concurrent processes never rename each other's file.
 export const writeJsonAtomic = (filePath: string, value: unknown): void => {
-  const temporary = `${filePath}${TEMPORARY_SUFFIX}`;
+  const temporary = `${filePath}.${randomUUID()}${TEMPORARY_SUFFIX}`;
   writeFileSync(temporary, `${JSON.stringify(value, null, JSON_INDENT)}\n`);
   renameSync(temporary, filePath);
 };

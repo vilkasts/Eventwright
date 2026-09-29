@@ -1,9 +1,9 @@
 import type { CommandRegistry } from "@/cli/command";
-import { requireRun } from "@/cli/require-run";
+import { requireRun, updateRun } from "@/cli/require-run";
 import { readApproval } from "@/io/approval-store";
 import { nowIso, todayIso } from "@/io/clock";
 import { printJson, printText } from "@/io/output";
-import { createRun, listRunIds, loadState, saveState, stateExists } from "@/io/state-store";
+import { createRun, listRunIds, loadState, stateExists } from "@/io/state-store";
 import { nextAction } from "@/lib/next-action";
 import { appendLog, createInitialState } from "@/lib/state";
 import { formatStatus } from "@/lib/status-report";
@@ -35,11 +35,15 @@ export const RUN_COMMANDS: CommandRegistry = {
   },
 
   next: ([runId, flag]) => {
-    const state = requireRun(runId);
-    const action = nextAction(state, readApproval(state.runId));
-    if (flag === RESUME_FLAG) appendLog(state, "resume", { next: action.action }, nowIso());
-    state.phase = action.action;
-    saveState(state);
+    const action = updateRun(runId, (state) => {
+      const computed = nextAction(state, readApproval(state.runId));
+      const isResume = flag === RESUME_FLAG;
+      if (isResume) appendLog(state, "resume", { next: computed.action }, nowIso());
+      // F18: an unchanged phase needs no write, which keeps next from competing with hooks for the state file.
+      const isChanged = isResume || state.phase !== computed.action;
+      state.phase = computed.action;
+      return { isChanged, result: computed };
+    });
     printJson(action);
   },
 };
