@@ -1,0 +1,867 @@
+{
+  "schemaVersion": 1,
+  "runId": "2026-09-29-paris-wedding-150-chateau",
+  "createdAt": "2026-09-29T18:50:50.077Z",
+  "updatedAt": "2026-09-29T19:07:30.221Z",
+  "phase": "failed",
+  "requirementsConfirmed": true,
+  "plan": {
+    "services": [
+      "venue",
+      "catering",
+      "entertainment",
+      "logistics"
+    ],
+    "selected": [
+      "requirements-formalizer",
+      "weather-analyst",
+      "venue-scout",
+      "catering-planner",
+      "entertainment-planner",
+      "logistics-planner",
+      "budget-aggregator",
+      "event-plan-builder",
+      "html-builder"
+    ],
+    "skipped": [],
+    "at": "2026-09-29T18:52:52.538Z"
+  },
+  "failure": {
+    "kind": "gate",
+    "gate": "G7-budget-within-limit",
+    "findings": [
+      "Total 20548 EUR vs limit 5000 EUR (withinLimit false); no single savings option covers the 15548 EUR overrun"
+    ],
+    "attempts": 4,
+    "at": "2026-09-29T19:07:27.973Z"
+  },
+  "agents": {
+    "requirements-formalizer": {
+      "status": "done",
+      "attempts": 2,
+      "startsWithoutArtifact": 0,
+      "structuralFailures": 0,
+      "structureOk": true,
+      "sha256": "67da2874b85a2e7e6e0d164dbe2e33eb448719127c4879c21842f357cdc43903",
+      "updatedAt": "2026-09-29T18:52:16.248Z",
+      "lastError": null,
+      "feedback": null,
+      "outputs": {}
+    },
+    "weather-analyst": {
+      "status": "done",
+      "attempts": 1,
+      "startsWithoutArtifact": 0,
+      "structuralFailures": 0,
+      "structureOk": true,
+      "sha256": "57118d0b0db9b92102f1997e1aa9c8e20deaeea94e83010ebcfb1c8536edee60",
+      "updatedAt": "2026-09-29T18:53:33.638Z",
+      "lastError": null,
+      "feedback": null,
+      "outputs": {}
+    },
+    "venue-scout": {
+      "status": "done",
+      "attempts": 4,
+      "startsWithoutArtifact": 0,
+      "structuralFailures": 0,
+      "structureOk": true,
+      "sha256": "9f8d4c3dd925e3d894ec380071d02ca337cfb2f9d768c3ce35fa9e85f6f01ff4",
+      "updatedAt": "2026-09-29T19:04:54.113Z",
+      "lastError": null,
+      "feedback": null,
+      "outputs": {}
+    },
+    "catering-planner": {
+      "status": "done",
+      "attempts": 4,
+      "startsWithoutArtifact": 0,
+      "structuralFailures": 0,
+      "structureOk": true,
+      "sha256": "abd0aa522268a92d7f14fe084562396752b502ede9af846be9ae5665dfc55df9",
+      "updatedAt": "2026-09-29T19:06:11.831Z",
+      "lastError": null,
+      "feedback": null,
+      "outputs": {}
+    },
+    "entertainment-planner": {
+      "status": "done",
+      "attempts": 4,
+      "startsWithoutArtifact": 0,
+      "structuralFailures": 0,
+      "structureOk": true,
+      "sha256": "208275a3daee207d8a6178d39b58649dd91aa8a0bac66633e9b4d43a048d6cf3",
+      "updatedAt": "2026-09-29T19:05:36.836Z",
+      "lastError": null,
+      "feedback": null,
+      "outputs": {}
+    },
+    "logistics-planner": {
+      "status": "done",
+      "attempts": 4,
+      "startsWithoutArtifact": 0,
+      "structuralFailures": 0,
+      "structureOk": true,
+      "sha256": "e5524d996398bf33906a4fab59f7c1372800beb7e0c8dcb6a30aef0b716e9251",
+      "updatedAt": "2026-09-29T19:05:45.257Z",
+      "lastError": null,
+      "feedback": null,
+      "outputs": {}
+    },
+    "budget-aggregator": {
+      "status": "done",
+      "attempts": 4,
+      "startsWithoutArtifact": 0,
+      "structuralFailures": 0,
+      "structureOk": true,
+      "sha256": "7936b514fe2438931f091d406c67e28d25800b34e498d613c7e344b86b2cddeb",
+      "updatedAt": "2026-09-29T19:06:41.519Z",
+      "lastError": null,
+      "feedback": null,
+      "outputs": {}
+    },
+    "event-plan-builder": {
+      "status": "pending",
+      "attempts": 0,
+      "startsWithoutArtifact": 0,
+      "structuralFailures": 0,
+      "structureOk": false,
+      "sha256": null,
+      "updatedAt": null,
+      "lastError": null,
+      "feedback": null,
+      "outputs": {}
+    },
+    "html-builder": {
+      "status": "pending",
+      "attempts": 0,
+      "startsWithoutArtifact": 0,
+      "structuralFailures": 0,
+      "structureOk": false,
+      "sha256": null,
+      "updatedAt": null,
+      "lastError": null,
+      "feedback": null,
+      "outputs": {}
+    }
+  },
+  "gates": {
+    "G1-requirements-complete": {
+      "status": "pass",
+      "attempts": 0,
+      "findings": []
+    },
+    "G2-sources-cited": {
+      "status": "pass",
+      "attempts": 0,
+      "findings": []
+    },
+    "G3-weather-grounded": {
+      "status": "pass",
+      "attempts": 0,
+      "findings": []
+    },
+    "G4-venue-fit": {
+      "status": "pass",
+      "attempts": 0,
+      "findings": []
+    },
+    "G5-dietary-coverage": {
+      "status": "pass",
+      "attempts": 0,
+      "findings": []
+    },
+    "G6-weather-plan-b": {
+      "status": "pass",
+      "attempts": 0,
+      "findings": []
+    },
+    "G7-budget-within-limit": {
+      "status": "blocked",
+      "attempts": 4,
+      "findings": [
+        "Total 20548 EUR vs limit 5000 EUR (withinLimit false); no single savings option covers the 15548 EUR overrun"
+      ]
+    },
+    "G8-currency-consistent": {
+      "status": "pass",
+      "attempts": 0,
+      "findings": []
+    },
+    "G9-must-haves-covered": {
+      "status": "pass",
+      "attempts": 0,
+      "findings": []
+    },
+    "G10-plan-covers-requirements": {
+      "status": "pending",
+      "attempts": 0,
+      "findings": []
+    },
+    "G11-plan-consistent-with-artifacts": {
+      "status": "pending",
+      "attempts": 0,
+      "findings": []
+    },
+    "G12-timeline-feasible": {
+      "status": "pending",
+      "attempts": 0,
+      "findings": []
+    }
+  },
+  "validation": {
+    "domain": {
+      "sha256": "9ab6621a3b197117fb79cf914a2ac1e377ab60750aed4814c5945448352b0b68",
+      "recorded": true,
+      "at": "2026-09-29T19:07:27.973Z"
+    },
+    "final": null
+  },
+  "log": [
+    {
+      "at": "2026-09-29T18:50:50.077Z",
+      "event": "init",
+      "details": {}
+    },
+    {
+      "at": "2026-09-29T18:50:58.737Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "requirements-formalizer"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T18:51:12.151Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "requirements-formalizer",
+        "file": "01-requirements.md",
+        "writer": "requirements-formalizer",
+        "sha256": "51320b966fb7"
+      }
+    },
+    {
+      "at": "2026-09-29T18:51:16.954Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "requirements-formalizer"
+      }
+    },
+    {
+      "at": "2026-09-29T18:52:01.661Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "requirements-formalizer"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T18:52:16.248Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "requirements-formalizer",
+        "file": "01-requirements.md",
+        "writer": "requirements-formalizer",
+        "sha256": "67da2874b85a"
+      }
+    },
+    {
+      "at": "2026-09-29T18:52:21.368Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "requirements-formalizer"
+      }
+    },
+    {
+      "at": "2026-09-29T18:52:48.066Z",
+      "event": "requirements-confirmed",
+      "details": {}
+    },
+    {
+      "at": "2026-09-29T18:52:52.538Z",
+      "event": "execution-plan",
+      "details": {
+        "selected": [
+          "requirements-formalizer",
+          "weather-analyst",
+          "venue-scout",
+          "catering-planner",
+          "entertainment-planner",
+          "logistics-planner",
+          "budget-aggregator",
+          "event-plan-builder",
+          "html-builder"
+        ],
+        "skipped": []
+      }
+    },
+    {
+      "at": "2026-09-29T18:52:58.568Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "weather-analyst"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T18:53:33.638Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "weather-analyst",
+        "file": "02-weather-outlook.md",
+        "writer": "weather-analyst",
+        "sha256": "57118d0b0db9"
+      }
+    },
+    {
+      "at": "2026-09-29T18:53:39.424Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "weather-analyst"
+      }
+    },
+    {
+      "at": "2026-09-29T18:53:43.986Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "venue-scout"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T18:54:32.805Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "venue-scout",
+        "file": "03-venues.md",
+        "writer": "venue-scout",
+        "sha256": "0047f8dc3209"
+      }
+    },
+    {
+      "at": "2026-09-29T18:54:38.677Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "venue-scout"
+      }
+    },
+    {
+      "at": "2026-09-29T18:54:43.506Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "catering-planner",
+          "entertainment-planner",
+          "logistics-planner"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T18:55:27.654Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "entertainment-planner",
+        "file": "05-entertainment.md",
+        "writer": "entertainment-planner",
+        "sha256": "1071adccbbee"
+      }
+    },
+    {
+      "at": "2026-09-29T18:55:30.418Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "catering-planner",
+        "file": "04-catering.md",
+        "writer": "catering-planner",
+        "sha256": "eae3f11e0527"
+      }
+    },
+    {
+      "at": "2026-09-29T18:55:45.381Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "logistics-planner",
+        "file": "06-logistics.md",
+        "writer": "logistics-planner",
+        "sha256": "fe9b0dc342f5"
+      }
+    },
+    {
+      "at": "2026-09-29T18:55:51.245Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "catering-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T18:55:52.413Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "entertainment-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T18:55:53.509Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "logistics-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T18:55:58.109Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "budget-aggregator"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T18:56:15.570Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "budget-aggregator",
+        "file": "07-budget.md",
+        "writer": "budget-aggregator",
+        "sha256": "50985bbd8d65"
+      }
+    },
+    {
+      "at": "2026-09-29T18:57:18.658Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "budget-aggregator"
+      }
+    },
+    {
+      "at": "2026-09-29T18:57:52.562Z",
+      "event": "validation-written",
+      "details": {
+        "stage": "domain",
+        "writer": "validator"
+      }
+    },
+    {
+      "at": "2026-09-29T18:57:55.889Z",
+      "event": "gates-recorded",
+      "details": {
+        "stage": "domain",
+        "passed": 8,
+        "failed": [
+          "G7-budget-within-limit"
+        ],
+        "blocked": []
+      }
+    },
+    {
+      "at": "2026-09-29T18:58:02.587Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "venue-scout"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T18:58:57.466Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "venue-scout",
+        "file": "03-venues.md",
+        "writer": "venue-scout",
+        "sha256": "a18f34809e32"
+      }
+    },
+    {
+      "at": "2026-09-29T18:59:03.655Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "venue-scout"
+      }
+    },
+    {
+      "at": "2026-09-29T18:59:08.385Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "catering-planner",
+          "entertainment-planner",
+          "logistics-planner"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T18:59:30.245Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "entertainment-planner",
+        "file": "05-entertainment.md",
+        "writer": "entertainment-planner",
+        "sha256": "8e134a1ea4e5"
+      }
+    },
+    {
+      "at": "2026-09-29T18:59:43.276Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "catering-planner",
+        "file": "04-catering.md",
+        "writer": "catering-planner",
+        "sha256": "06dd45f374ba"
+      }
+    },
+    {
+      "at": "2026-09-29T18:59:51.588Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "logistics-planner",
+        "file": "06-logistics.md",
+        "writer": "logistics-planner",
+        "sha256": "b54c24f69468"
+      }
+    },
+    {
+      "at": "2026-09-29T18:59:56.793Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "catering-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T18:59:57.979Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "entertainment-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T18:59:59.246Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "logistics-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T19:00:05.609Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "budget-aggregator"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T19:00:20.712Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "budget-aggregator",
+        "file": "07-budget.md",
+        "writer": "budget-aggregator",
+        "sha256": "36702b6e56ac"
+      }
+    },
+    {
+      "at": "2026-09-29T19:00:27.284Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "budget-aggregator"
+      }
+    },
+    {
+      "at": "2026-09-29T19:00:59.631Z",
+      "event": "validation-written",
+      "details": {
+        "stage": "domain",
+        "writer": "validator"
+      }
+    },
+    {
+      "at": "2026-09-29T19:01:05.594Z",
+      "event": "gates-recorded",
+      "details": {
+        "stage": "domain",
+        "passed": 7,
+        "failed": [
+          "G4-venue-fit",
+          "G7-budget-within-limit"
+        ],
+        "blocked": []
+      }
+    },
+    {
+      "at": "2026-09-29T19:01:11.552Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "venue-scout"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T19:01:45.722Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "venue-scout",
+        "file": "03-venues.md",
+        "writer": "venue-scout",
+        "sha256": "003b2f1f98c8"
+      }
+    },
+    {
+      "at": "2026-09-29T19:01:51.434Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "venue-scout"
+      }
+    },
+    {
+      "at": "2026-09-29T19:01:56.270Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "catering-planner",
+          "entertainment-planner",
+          "logistics-planner"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T19:02:18.351Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "entertainment-planner",
+        "file": "05-entertainment.md",
+        "writer": "entertainment-planner",
+        "sha256": "c680c5baa4c9"
+      }
+    },
+    {
+      "at": "2026-09-29T19:02:25.931Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "logistics-planner",
+        "file": "06-logistics.md",
+        "writer": "logistics-planner",
+        "sha256": "b282bf728355"
+      }
+    },
+    {
+      "at": "2026-09-29T19:02:35.188Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "catering-planner",
+        "file": "04-catering.md",
+        "writer": "catering-planner",
+        "sha256": "87749acb5120"
+      }
+    },
+    {
+      "at": "2026-09-29T19:02:41.580Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "catering-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T19:02:42.930Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "entertainment-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T19:02:44.131Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "logistics-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T19:02:48.850Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "budget-aggregator"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T19:03:04.608Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "budget-aggregator",
+        "file": "07-budget.md",
+        "writer": "budget-aggregator",
+        "sha256": "d2cfca417f7d"
+      }
+    },
+    {
+      "at": "2026-09-29T19:03:11.562Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "budget-aggregator"
+      }
+    },
+    {
+      "at": "2026-09-29T19:03:46.638Z",
+      "event": "validation-written",
+      "details": {
+        "stage": "domain",
+        "writer": "validator"
+      }
+    },
+    {
+      "at": "2026-09-29T19:03:53.273Z",
+      "event": "gates-recorded",
+      "details": {
+        "stage": "domain",
+        "passed": 6,
+        "failed": [
+          "G2-sources-cited",
+          "G4-venue-fit",
+          "G7-budget-within-limit"
+        ],
+        "blocked": []
+      }
+    },
+    {
+      "at": "2026-09-29T19:04:02.513Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "venue-scout"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T19:04:54.113Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "venue-scout",
+        "file": "03-venues.md",
+        "writer": "venue-scout",
+        "sha256": "9f8d4c3dd925"
+      }
+    },
+    {
+      "at": "2026-09-29T19:05:00.224Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "venue-scout"
+      }
+    },
+    {
+      "at": "2026-09-29T19:05:05.096Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "catering-planner",
+          "entertainment-planner",
+          "logistics-planner"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T19:05:36.836Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "entertainment-planner",
+        "file": "05-entertainment.md",
+        "writer": "entertainment-planner",
+        "sha256": "208275a3daee"
+      }
+    },
+    {
+      "at": "2026-09-29T19:05:45.257Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "logistics-planner",
+        "file": "06-logistics.md",
+        "writer": "logistics-planner",
+        "sha256": "e5524d996398"
+      }
+    },
+    {
+      "at": "2026-09-29T19:06:11.831Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "catering-planner",
+        "file": "04-catering.md",
+        "writer": "catering-planner",
+        "sha256": "abd0aa522268"
+      }
+    },
+    {
+      "at": "2026-09-29T19:06:17.452Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "catering-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T19:06:18.606Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "entertainment-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T19:06:19.782Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "logistics-planner"
+      }
+    },
+    {
+      "at": "2026-09-29T19:06:24.625Z",
+      "event": "agents-started",
+      "details": {
+        "agents": [
+          "budget-aggregator"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-29T19:06:41.519Z",
+      "event": "artifact-written",
+      "details": {
+        "agent": "budget-aggregator",
+        "file": "07-budget.md",
+        "writer": "budget-aggregator",
+        "sha256": "7936b514fe24"
+      }
+    },
+    {
+      "at": "2026-09-29T19:06:48.124Z",
+      "event": "structure-ok",
+      "details": {
+        "agent": "budget-aggregator"
+      }
+    },
+    {
+      "at": "2026-09-29T19:07:21.524Z",
+      "event": "validation-written",
+      "details": {
+        "stage": "domain",
+        "writer": "validator"
+      }
+    },
+    {
+      "at": "2026-09-29T19:07:27.973Z",
+      "event": "gates-recorded",
+      "details": {
+        "stage": "domain",
+        "passed": 8,
+        "failed": [],
+        "blocked": [
+          "G7-budget-within-limit"
+        ]
+      }
+    }
+  ]
+}
