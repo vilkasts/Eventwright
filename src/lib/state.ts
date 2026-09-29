@@ -69,7 +69,7 @@ const resetPassedGates = (state: WorkflowState, names: readonly AgentName[]): vo
   }
 };
 
-// Новые требования могут изменить список сервисов: человек подтверждает их заново, план выполнения пересобирается.
+// New requirements may change the service list: the human confirms them again and the execution plan is rebuilt.
 const resetExecutionPlan = (state: WorkflowState): void => {
   state.requirementsConfirmed = false;
   if (state.plan === null) return;
@@ -96,7 +96,7 @@ const recordOutputWrite = (state: WorkflowState, fileName: string, hash: string,
   appendLog(state, "output-written", { file: fileName, writer }, now);
 };
 
-// Возвращает true, если состояние изменилось и его нужно сохранить.
+// Returns true if the state changed and must be saved.
 export const recordArtifactWrite = (
   state: WorkflowState,
   location: RunLocation,
@@ -140,7 +140,7 @@ export const recordArtifactWrite = (
   return true;
 };
 
-// Координатор вызывает после отказа человека, если отзыв затрагивает upstream-агентов.
+// Called by the coordinator after a human rejection when the feedback touches upstream agents.
 export const invalidateAgents = (
   state: WorkflowState,
   names: readonly AgentName[],

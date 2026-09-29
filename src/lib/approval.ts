@@ -13,7 +13,7 @@ const reopenPlanForRevision = (state: WorkflowState, feedback: string): void => 
   state.validation.final = null;
 };
 
-// Решение человека: проверяет, что run ждёт одобрения именно этого плана, и возвращает новый approval.json.
+// Human decision: checks that the run awaits approval of exactly this plan and returns the new approval.json.
 export const applyDecision = (
   state: WorkflowState,
   approval: ApprovalFile | null,

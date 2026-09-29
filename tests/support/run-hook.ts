@@ -22,7 +22,7 @@ const permissionDecision = (stdout: string): string | null => {
   return isRecord(output) && typeof output.permissionDecision === "string" ? output.permissionDecision : null;
 };
 
-// Hook запускается так же, как его вызывает Claude Code: payload в stdin, ответ в stdout/stderr/exit code.
+// The hook runs the same way Claude Code calls it: payload on stdin, answer via stdout/stderr/exit code.
 export const runHook = (name: string, payload: unknown): HookResult => {
   const result = spawnSync(process.execPath, ["--import", "tsx", path.join(HOOKS_DIRECTORY, `${name}.ts`)], {
     input: JSON.stringify(payload),

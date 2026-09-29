@@ -24,7 +24,7 @@ const parseStage = (value: string | undefined): GatedStage => {
   return stage;
 };
 
-// Переходы workflow: подтверждение требований, план выполнения, гейты, инвалидация.
+// Workflow transitions: requirements confirmation, execution plan, gates, invalidation.
 export const FLOW_COMMANDS: CommandRegistry = {
   "confirm-requirements": ([runId]) => {
     const state = requireRun(runId);
@@ -45,7 +45,7 @@ export const FLOW_COMMANDS: CommandRegistry = {
     printJson(plan);
   },
 
-  // Всегда exit 0: валидатор читает результат G7 из JSON.
+  // Always exit 0: the validator reads the G7 result from the JSON.
   budget: ([runId]) => {
     const state = requireRun(runId);
     const budgetText = readTextIfExists(artifactPath(state.runId, requireArtifactOf(BUDGET_AGENT)));

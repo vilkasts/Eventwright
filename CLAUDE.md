@@ -144,9 +144,9 @@ tests/
 
 ### Comments
 
-- In **Russian** (the user reads the code), brief, and only where the "why" is not obvious.
-- Reference gate ids and workflow invariants where relevant (`// G7: итог с резервом не должен превышать лимит`).
-- Prompts for agents, skills, artifacts, README and user-facing output stay in English.
+- In **English**, brief, and only where the "why" is not obvious. No comments in other languages.
+- Reference gate ids and workflow invariants where relevant (`// G7: the total with contingency must not exceed the limit`).
+- Prompts for agents, skills, artifacts, README and user-facing output are in English too.
 
 ## Tooling
 

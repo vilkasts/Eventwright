@@ -4,7 +4,7 @@ import type { BudgetStatus, Money } from "@/types/checks";
 const LIMIT_LABEL = "Budget";
 const TOTAL_LABEL = "Total with contingency";
 
-// Строгий формат «- <Label>: 9000 EUR» без разделителей тысяч — иначе G7 не проверить детерминированно.
+// Strict "- <Label>: 9000 EUR" format without thousands separators, otherwise G7 cannot be checked deterministically.
 export const parseMoney = (text: string, label: string): Money | null => {
   const pattern = new RegExp(`^\\s*- ${escapeRegExp(label)}:\\s*(\\d+(?:\\.\\d+)?)\\s+([A-Z]{3})\\s*$`, "m");
   const [, amount, currency] = pattern.exec(text) ?? [];

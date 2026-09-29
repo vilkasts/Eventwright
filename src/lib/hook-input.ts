@@ -6,7 +6,7 @@ const editedTexts = (edits: unknown): string[] =>
     .map((edit) => (isRecord(edit) ? stringOrNull(edit.new_string) : null))
     .filter((text) => text !== null);
 
-// Payload Claude Code приходит как unknown: берём только нужные поля и только нужных типов.
+// The Claude Code payload arrives as unknown: take only the needed fields, and only of the expected types.
 export const parseHookInput = (raw: unknown): HookInput => {
   const payload = isRecord(raw) ? raw : {};
   const toolInput = isRecord(payload.tool_input) ? payload.tool_input : {};

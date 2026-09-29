@@ -8,7 +8,7 @@ export const PLAN_AGENT = "event-plan-builder" satisfies AgentName;
 export const OUTPUT_AGENT = "html-builder" satisfies AgentName;
 export const VALIDATOR_NAME = "validator";
 
-// Стадии с quality gates в порядке выполнения.
+// Stages with quality gates, in execution order.
 export const STAGE_ORDER: readonly GatedStage[] = ["domain", "final"];
 
 export const ARTIFACTS_AREA: ArtifactArea = "artifacts";

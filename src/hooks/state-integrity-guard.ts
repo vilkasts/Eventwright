@@ -1,4 +1,4 @@
-// PreToolUse: состояние и одобрение меняют только CLI и hooks; команды одобрения — только человек.
+// PreToolUse: state and approval change only via the CLI and hooks; approval commands are human-only.
 import { denyToolUse, readHookInput } from "@/io/hook-io";
 import { stateIntegrityViolation } from "@/lib/guards/state-integrity";
 

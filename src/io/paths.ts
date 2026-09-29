@@ -3,7 +3,7 @@ import process from "node:process";
 
 import { APPROVAL_FILE, ARTIFACTS_AREA, OUTPUT_AREA, RUNS_DIRECTORY, STATE_FILE } from "@/config/workflow";
 
-// Читается при каждом вызове: hooks и тесты указывают CLAUDE_PROJECT_DIR на другой checkout.
+// Read on every call: hooks and tests point CLAUDE_PROJECT_DIR at another checkout.
 export const projectDirectory = (): string => process.env.CLAUDE_PROJECT_DIR ?? process.cwd();
 export const runsDirectory = (): string => path.join(projectDirectory(), RUNS_DIRECTORY);
 export const runDirectory = (runId: string): string => path.join(runsDirectory(), runId);

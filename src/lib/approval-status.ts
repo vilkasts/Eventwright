@@ -1,6 +1,6 @@
 import type { ApprovalFile } from "@/types/approval";
 
-// Одобрение действует только для тех байтов плана, которые видел человек.
+// An approval is valid only for the exact plan bytes the human saw.
 export const isApprovalCurrent = (approval: ApprovalFile | null, planSha256: string | null): boolean =>
   approval !== null &&
   planSha256 !== null &&

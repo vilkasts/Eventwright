@@ -1,4 +1,4 @@
-// PostToolUse: каждая запись артефакта фиксируется в workflow-state.json (статус, sha256, инвалидация downstream).
+// PostToolUse: every artifact write is recorded in workflow-state.json (status, sha256, downstream invalidation).
 import { nowIso } from "@/io/clock";
 import { sha256OfFile } from "@/io/files";
 import { readHookInput } from "@/io/hook-io";

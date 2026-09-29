@@ -27,7 +27,7 @@ const buildBrief = (state: WorkflowState, name: AgentName): Brief => ({
 const isDone = (state: WorkflowState, name: AgentName): boolean =>
   state.agents[name].status === "done" || state.agents[name].status === "skipped";
 
-// Падение между записью артефакта и его проверкой не должно пропустить непроверенную работу дальше.
+// A crash between writing an artifact and checking it must not let unchecked work move on.
 const uncheckedAgents = (state: WorkflowState): AgentName[] =>
   AGENT_NAMES.filter(
     (name) => artifactOf(name) !== null && state.agents[name].status === "done" && !state.agents[name].structureOk,
@@ -48,7 +48,7 @@ const stageAction = (state: WorkflowState, stage: GatedStage): Action | null => 
   return { action: "validate", stage, recheck, notApplicable };
 };
 
-// Следующий шаг вычисляет код, а не модель: координатор только исполняет его.
+// The next step is computed by code, not by the model: the coordinator only executes it.
 export const nextAction = (state: WorkflowState, approval: ApprovalFile | null): Action => {
   if (state.failure !== null) return { action: "failed", failure: state.failure };
 

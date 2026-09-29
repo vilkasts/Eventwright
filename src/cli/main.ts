@@ -9,7 +9,7 @@ import { printError } from "@/io/output";
 const COMMANDS: CommandRegistry = { ...RUN_COMMANDS, ...AGENT_COMMANDS, ...FLOW_COMMANDS };
 const FAILURE_EXIT_CODE = 1;
 
-// CLI координатора: stdout — JSON для модели, ошибки — stderr и exit 1.
+// Coordinator CLI: stdout is JSON for the model; errors go to stderr with exit 1.
 const [commandName = "", ...args] = process.argv.slice(2);
 const command = COMMANDS[commandName];
 

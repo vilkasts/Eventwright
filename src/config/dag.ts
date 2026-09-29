@@ -2,8 +2,8 @@ import type { Dag } from "@/types/workflow";
 
 const SERVICE_PLANNERS = ["venue-scout", "catering-planner", "entertainment-planner", "logistics-planner"] as const;
 
-// Граф workflow — единственное место, где заданы зависимости, артефакты, разделы и владельцы гейтов.
-// Агенты с полем service запускаются, только если сервис есть в подтверждённых требованиях.
+// The workflow graph is the single place that defines dependencies, artifacts, sections and gate owners.
+// Agents with a service field run only if that service is in the confirmed requirements.
 export const DAG: Dag = {
   maxRetries: 3,
   agents: {

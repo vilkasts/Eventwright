@@ -3,7 +3,7 @@ import type { ApprovalCommand } from "@/types/approval";
 const APPROVE = /^\/approve-event\s+(\S+)\s*$/;
 const REJECT = /^\/reject-event\s+(\S+)(?:\s+([\s\S]+))?$/;
 
-// Разбирает сырой текст, набранный человеком; всё остальное — не команда одобрения.
+// Parses the raw text typed by the human; anything else is not an approval command.
 export const parseApprovalCommand = (prompt: string): ApprovalCommand | null => {
   const text = prompt.trim();
   const [, approvedRun] = APPROVE.exec(text) ?? [];

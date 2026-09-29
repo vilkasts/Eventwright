@@ -37,7 +37,7 @@ const metaIssues = (lines: readonly string[], runId: string, agent: string): str
 const hasCitation = (lines: readonly string[]): boolean =>
   sectionBody(lines, "Sources").some((line) => line.trim().startsWith("- ") && CITATION.test(line));
 
-// Детерминированная структурная проверка: пустой массив — артефакт годен.
+// Deterministic structure check: an empty array means the artifact is valid.
 export const checkArtifact = (text: string, rules: ArtifactRules): string[] => {
   const lines = text.split(/\r?\n/);
   const issues = [...sectionIssues(lines, rules.sections), ...metaIssues(lines, rules.runId, rules.agent)];

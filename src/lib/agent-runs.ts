@@ -4,7 +4,7 @@ import type { AgentName, WorkflowState } from "@/types/workflow";
 
 const NO_ARTIFACT_FINDING = "agent failed to produce its artifact";
 
-// Агент, который раз за разом падает без артефакта, не доходит до гейтов — лимит считаем здесь.
+// An agent that keeps failing without an artifact never reaches the gates, so its limit is counted here.
 export const recordAgentStarts = (state: WorkflowState, names: readonly AgentName[], now: string): void => {
   for (const name of names) {
     const agent = state.agents[name];
@@ -23,7 +23,7 @@ export const recordAgentStarts = (state: WorkflowState, names: readonly AgentNam
   appendLog(state, "agents-started", { agents: names }, now);
 };
 
-// Структурный гейт после каждой группы: провал возвращает агента в работу, лимит — MAX_RETRIES подряд.
+// Structural gate after every group: a failure sends the agent back to work; the limit is MAX_RETRIES in a row.
 export const recordStructureCheck = (
   state: WorkflowState,
   name: AgentName,

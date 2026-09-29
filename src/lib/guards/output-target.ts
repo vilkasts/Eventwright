@@ -5,7 +5,7 @@ import type { HookInput } from "@/types/hooks";
 
 const SHELL_OUTPUT_PATH = new RegExp(`${RUNS_DIRECTORY}[\\\\/]([^\\\\/\\s"']+)[\\\\/]${OUTPUT_AREA}[\\\\/]`);
 
-// Run, в чей итоговый документ пытается писать инструмент (файлом или через shell), либо null.
+// The run whose final document a tool tries to write (as a file or via a shell), or null.
 export const outputRunId = (input: HookInput): string | null => {
   const tool = input.toolName ?? "";
   if (FILE_TOOLS.includes(tool)) {

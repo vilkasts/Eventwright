@@ -1,4 +1,4 @@
-// Нормализованный payload hook: поля Claude Code в snake_case приводятся к camelCase при разборе.
+// Normalized hook payload: Claude Code snake_case fields are mapped to camelCase during parsing.
 export type HookInput = {
   toolName: string | null;
   filePath: string | null;

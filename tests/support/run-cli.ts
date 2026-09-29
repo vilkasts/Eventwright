@@ -11,7 +11,7 @@ const CLI_ENTRY = path.join(process.cwd(), "src", "cli", "main.ts");
 
 export type CliResult = { code: number | null; out: string; err: string };
 
-// CLI запускается так же, как его вызывает координатор: отдельный процесс node + tsx.
+// The CLI runs the same way the coordinator calls it: a separate node + tsx process.
 export const runCli = (...args: string[]): CliResult => {
   const result = spawnSync(process.execPath, ["--import", "tsx", CLI_ENTRY, ...args], {
     encoding: "utf8",

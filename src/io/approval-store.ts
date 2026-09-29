@@ -17,7 +17,7 @@ export const readApproval = (runId: string): ApprovalFile | null => {
   return raw;
 };
 
-// Одобрено ли то, что сейчас лежит на диске, а не то, что видел человек раньше.
+// Whether what is on disk now is approved, not what the human saw earlier.
 export const isApproved = (runId: string): boolean =>
   isApprovalCurrent(readApproval(runId), sha256OfFile(planFilePath(runId)));
 

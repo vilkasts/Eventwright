@@ -6,7 +6,7 @@ import { NOW } from "@tests/support/state-fixtures";
 
 export const ALL_SERVICES: readonly string[] = [VENUE_SERVICE, ...SERVICES];
 
-// Имитирует «человек подтвердил требования, координатор применил план выполнения».
+// Simulates "the human confirmed the requirements and the coordinator applied the execution plan".
 export const confirmWithPlan = (state: WorkflowState, services: readonly string[] = ALL_SERVICES): void => {
   state.requirementsConfirmed = true;
   applyExecutionPlan(state, services, NOW);

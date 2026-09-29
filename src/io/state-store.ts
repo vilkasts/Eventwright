@@ -22,7 +22,7 @@ export const saveState = (state: WorkflowState, now: string = nowIso()): void =>
   writeJsonAtomic(statePath(state.runId), state);
 };
 
-// Новый run: папки артефактов и итогового документа плюс начальное состояние.
+// New run: artifact and output folders plus the initial state.
 export const createRun = (state: WorkflowState): void => {
   mkdirSync(artifactsDirectory(state.runId), { recursive: true });
   mkdirSync(outputDirectory(state.runId), { recursive: true });

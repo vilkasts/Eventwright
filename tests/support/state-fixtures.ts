@@ -15,7 +15,7 @@ export const DOMAIN_AGENTS: readonly AgentName[] = [
   "budget-aggregator",
 ];
 
-// Имитирует «агент записал артефакт (hook post-write-state) и структурная проверка координатора прошла».
+// Simulates "the agent wrote its artifact (post-write-state hook) and the coordinator's structure check passed".
 export const markDone = (state: WorkflowState, names: readonly AgentName[]): void => {
   for (const name of names) {
     const location = { runId: state.runId, area: ARTIFACTS_AREA, fileName: requireArtifactOf(name) };

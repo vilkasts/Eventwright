@@ -20,7 +20,7 @@ export const readJson = (filePath: string): unknown => {
 export const sha256OfFile = (filePath: string): string | null =>
   existsSync(filePath) ? sha256(readFileSync(filePath)) : null;
 
-// Запись через временный файл: прерванный процесс не оставит половину JSON.
+// Write through a temporary file: an interrupted process never leaves half a JSON file.
 export const writeJsonAtomic = (filePath: string, value: unknown): void => {
   const temporary = `${filePath}${TEMPORARY_SUFFIX}`;
   writeFileSync(temporary, `${JSON.stringify(value, null, JSON_INDENT)}\n`);

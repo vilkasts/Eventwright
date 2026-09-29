@@ -23,7 +23,7 @@ export const approvedFile = (runId: string, planSha256: string): ApprovalFile =>
   return { runId, current, history: [current] };
 };
 
-// Run, чей план прошёл все гейты и ждёт человека; хэш плана = sha256(planText).
+// A run whose plan passed all gates and awaits the human; plan hash = sha256(planText).
 export const buildAwaitingApprovalState = (runId: string, planText: string = PLAN_TEXT): WorkflowState => {
   const state = createInitialState(runId, NOW);
   markDone(state, DOMAIN_AGENTS);

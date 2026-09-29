@@ -14,7 +14,7 @@ const GATE_ROW_ID = /^G\d+-/;
 const MIN_GATE_ROW_CELLS = 6;
 const VERDICTS: readonly string[] = ["PASS", "FAIL"];
 
-// Строка отчёта валидатора: | G5-dietary-coverage | FAIL | catering-planner | finding |
+// A validator report row: | G5-dietary-coverage | FAIL | catering-planner | finding |
 export const parseGateTable = (reportText: string): Map<string, GateRow> => {
   const rows = new Map<string, GateRow>();
   for (const line of reportText.split(/\r?\n/)) {
@@ -33,7 +33,7 @@ export const parseGateTable = (reportText: string): Map<string, GateRow> => {
 const activeOwners = (state: WorkflowState, id: GateId): AgentName[] =>
   DAG.gates[id].owners.filter((owner) => state.agents[owner].status !== "skipped");
 
-// Владельцы из отчёта, пересечённые с допустимыми; если валидатор назвал чужих — все допустимые.
+// Reported owners intersected with the allowed ones; if the validator named others, all allowed owners.
 const ownersToRetry = (state: WorkflowState, id: GateId, reported: readonly string[]): AgentName[] => {
   const allowed = activeOwners(state, id);
   const named = reported.filter(isAgentName).filter((owner) => allowed.includes(owner));

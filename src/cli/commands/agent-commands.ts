@@ -28,7 +28,7 @@ const inspectArtifact = (runId: string, name: AgentName): string[] => {
   });
 };
 
-// Запуски агентов и структурный гейт после каждой группы.
+// Agent starts and the structural gate after every group.
 export const AGENT_COMMANDS: CommandRegistry = {
   start: ([runId, ...names]) => {
     const state = requireRun(runId);
@@ -38,7 +38,7 @@ export const AGENT_COMMANDS: CommandRegistry = {
     printJson({ ok: true, started: agents });
   },
 
-  // Самопроверка агента: состояние не меняется.
+  // Agent self-check: the state is not changed.
   lint: ([runId, name = ""]) => {
     const state = requireRun(runId);
     const issues = inspectArtifact(state.runId, parseAgentName(name));

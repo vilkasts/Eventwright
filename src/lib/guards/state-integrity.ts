@@ -27,7 +27,7 @@ const shellViolation = (command: string): string | null => {
   return null;
 };
 
-// PreToolUse: workflow-state.json и approval.json меняют только CLI и hooks; одобряет только человек.
+// PreToolUse: workflow-state.json and approval.json change only via the CLI and hooks; only a human approves.
 export const stateIntegrityViolation = (input: HookInput): string | null => {
   const tool = input.toolName ?? "";
   if (FILE_TOOLS.includes(tool)) return fileViolation(input);

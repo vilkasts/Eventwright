@@ -1,5 +1,5 @@
-// UserPromptSubmit срабатывает на сырой текст, набранный ЧЕЛОВЕКОМ, до раскрытия slash-команды.
-// Это единственный писатель approval.json: модель не может подделать одобрение.
+// UserPromptSubmit fires on the raw text typed by a HUMAN, before the slash command is expanded.
+// This is the only writer of approval.json: the model cannot forge an approval.
 import { HASH_PREVIEW_LENGTH } from "@/config/workflow";
 import { recordDecision } from "@/io/approval-store";
 import { nowIso } from "@/io/clock";

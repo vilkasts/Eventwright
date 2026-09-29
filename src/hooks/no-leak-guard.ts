@@ -1,4 +1,4 @@
-// PreToolUse: в документе для человека не должно быть внутренней кухни workflow.
+// PreToolUse: the human-facing document must not expose workflow internals.
 import { FILE_TOOLS } from "@/config/hooks";
 import { OUTPUT_AREA } from "@/config/workflow";
 import { denyToolUse, readHookInput } from "@/io/hook-io";

@@ -1,4 +1,4 @@
-// PreToolUse: итоговый документ можно создать только для плана, чей точный sha256 одобрил человек.
+// PreToolUse: the final document may be created only for a plan whose exact sha256 a human approved.
 import { isApproved } from "@/io/approval-store";
 import { denyToolUse, readHookInput } from "@/io/hook-io";
 import { outputRunId } from "@/lib/guards/output-target";

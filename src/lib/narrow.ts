@@ -1,4 +1,4 @@
-// Сужение unknown-данных (JSON с диска, stdin hooks) без приведений типов.
+// Narrowing of unknown data (JSON from disk, hook stdin) without type casts.
 export const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
@@ -7,14 +7,14 @@ export const isOneOf = <T extends string>(values: readonly T[], value: unknown):
 
 export const stringOrNull = (value: unknown): string | null => (typeof value === "string" ? value : null);
 
-// Массив из JSON как unknown[]: элементы по-прежнему нужно сужать.
+// A JSON array as unknown[]: its items still have to be narrowed.
 export const listOf = (value: unknown): unknown[] => {
   if (!Array.isArray(value)) return [];
   const items: unknown[] = value;
   return items;
 };
 
-// Строит Record по полному списку ключей; проверка сохраняет строгий тип без `as`.
+// Builds a Record from the full key list; the check keeps the strict type without `as`.
 export const recordOf = <K extends string, V>(keys: readonly K[], make: (key: K) => V): Record<K, V> => {
   const result: Partial<Record<K, V>> = {};
   for (const key of keys) result[key] = make(key);

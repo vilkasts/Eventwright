@@ -1,4 +1,4 @@
-// Кортежи имён — единственный источник литералов; типы ниже выводятся из них.
+// Name tuples are the single source of literals; the types below are derived from them.
 export const AGENT_NAMES = [
   "requirements-formalizer",
   "weather-analyst",

@@ -9,7 +9,7 @@ import type { ExecutionPlan, RequestedService, WorkflowState } from "@/types/wor
 const REQUESTED_SERVICES: readonly RequestedService[] = [VENUE_SERVICE, ...SERVICES];
 const SERVICES_LINE = /^\s*- Services:\s*(.+)$/m;
 
-// Строку «- Services: venue, catering, …» пишет formalizer, подтверждает человек.
+// The "- Services: venue, catering, …" line is written by the formalizer and confirmed by the human.
 export const parseServices = (requirementsText: string): string[] | null => {
   const list = SERVICES_LINE.exec(requirementsText)?.[1];
   if (list === undefined) return null;
@@ -20,7 +20,7 @@ export const parseServices = (requirementsText: string): string[] | null => {
   return [...new Set(services)];
 };
 
-// Динамический выбор subagents: планировщики незапрошенных сервисов пропускаются, их гейты — n/a.
+// Dynamic subagent selection: planners of services not requested are skipped and their gates become n/a.
 export const applyExecutionPlan = (state: WorkflowState, services: readonly string[], now: string): ExecutionPlan => {
   const unknown = services.filter((service) => !isOneOf(REQUESTED_SERVICES, service));
   if (unknown.length > 0) {

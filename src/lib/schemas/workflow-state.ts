@@ -15,7 +15,7 @@ const isAgentState = (value: unknown): boolean =>
 const isGateState = (value: unknown): boolean =>
   isRecord(value) && isOneOf(GATE_STATUSES, value.status) && typeof value.attempts === "number";
 
-// Состояние с диска проверяется до использования: битый или чужой файл даёт понятную ошибку, а не падение позже.
+// State from disk is validated before use: a broken or foreign file gives a clear error instead of a crash later.
 export const isWorkflowState = (value: unknown): value is WorkflowState =>
   isRecord(value) &&
   value.schemaVersion === SCHEMA_VERSION &&

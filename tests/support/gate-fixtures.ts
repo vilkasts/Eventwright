@@ -2,7 +2,7 @@ import { DAG } from "@/config/dag";
 import { GATE_IDS } from "@/types/workflow";
 import type { GatedStage, GateId } from "@/types/workflow";
 
-// Отчёт валидатора: все гейты стадии PASS, кроме перечисленных (гейт → владельцы, которых назвал валидатор).
+// Validator report: every gate of the stage is PASS except the listed ones (gate → owners named by the validator).
 export const gateReport = (stage: GatedStage, failing: Partial<Record<GateId, string>> = {}): string =>
   [
     "## Gate results",

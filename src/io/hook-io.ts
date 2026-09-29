@@ -11,14 +11,14 @@ export const readHookInput = async (): Promise<HookInput> => {
   return parseHookInput(payload);
 };
 
-// Отказ PreToolUse по контракту Claude Code: JSON с permissionDecision и exit 0.
+// PreToolUse denial per the Claude Code contract: JSON with permissionDecision and exit 0.
 export const denyToolUse = (reason: string): never => {
   const decision = { hookEventName: "PreToolUse", permissionDecision: "deny", permissionDecisionReason: reason };
   process.stdout.write(JSON.stringify({ hookSpecificOutput: decision }));
   process.exit(0);
 };
 
-// Блокировка UserPromptSubmit: exit 2, сообщение уходит человеку через stderr.
+// UserPromptSubmit block: exit 2, the message reaches the human via stderr.
 export const blockPrompt = (source: string, message: string): never => {
   process.stderr.write(`[${source}] ${message}\n`);
   process.exit(HOOK_BLOCK_EXIT_CODE);

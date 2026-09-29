@@ -2,7 +2,7 @@ import { VALIDATOR_NAME } from "@/config/workflow";
 import { escapeRegExp } from "@/lib/text";
 import { AGENT_NAMES } from "@/types/workflow";
 
-// Внутренняя кухня workflow, которой не место в документе для человека.
+// Workflow internals that do not belong in the human-facing document.
 const LEAK_PATTERNS: readonly RegExp[] = [
   /\b0\d-[a-z-]+\.md\b/g,
   /\bvalidation-(?:domain|final)\.md\b/g,

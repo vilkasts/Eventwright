@@ -11,7 +11,7 @@ import { formatStatus } from "@/lib/status-report";
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const RESUME_FLAG = "--resume";
 
-// Жизненный цикл run: создание, список, статус и вычисление следующего шага.
+// Run lifecycle: create, list, status and compute the next step.
 export const RUN_COMMANDS: CommandRegistry = {
   init: ([slug = ""]) => {
     if (!SLUG.test(slug)) throw new Error("slug must be lowercase kebab-case, e.g. lisbon-birthday");
