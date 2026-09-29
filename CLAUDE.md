@@ -8,7 +8,6 @@ Eventwright is an agentic event-planning workflow for Claude Code: a `/plan-even
 
 **Everything in this repository is written in English**: code comments, documentation (`README.md`, `CLAUDE.md`, `runs/*/SCENARIO.md`), agent prompts, skills, slash commands, templates, workflow artifacts, the final event plan, CLI and hook messages, and commit messages.
 
-- The only exception: temporary implementation plans and handoff notes in `docs/superpowers/plans/` may be written in Russian.
 - A user's request may arrive in any language; agents still write artifacts in English and keep proper names as given.
 - Chat replies to the user may follow the user's language — that is conversation, not project content.
 

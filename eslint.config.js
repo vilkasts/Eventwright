@@ -26,7 +26,7 @@ const restrictImports = (forbiddenLayers, paths = []) => [
 ];
 
 export default defineConfig([
-  globalIgnores(["node_modules", "runs", "docs"]),
+  globalIgnores(["node_modules", "runs"]),
   { files: ["**/*.js"], extends: [js.configs.recommended], languageOptions: { globals: globals.node } },
   {
     files: ["**/*.ts"],

@@ -116,6 +116,16 @@ Four saved runs with inputs, artifacts, validator reports, state and approvals a
 
 **Why deterministic checks and JSON state.** Artifacts are plain Markdown for people and agents. What must not depend on a model's judgment is decided by code: the next step, retry limits, the budget arithmetic of G7, the structure of each artifact and the approval bound to the plan's sha256. In the demo runs this caught real failures that a model had reported as done — an artifact written through a shell script instead of the Write tool, and claims that were not on the cited page — and kept the workflow resumable after an interrupted session.
 
+### Known limitations
+
+Deliberate trade-offs, kept after the final code review:
+
+- **One process per hook.** Every Write starts three PreToolUse guards and one PostToolUse hook as separate `node --import tsx` processes (about 0.3 s each). Separate named guards keep the PreToolUse/PostToolUse design visible; the run lock makes their concurrent state updates safe.
+- **The state log is never trimmed.** `workflow-state.json → log` keeps every event of a run: it is the evidence behind each `SCENARIO.md`. A run writes tens of kilobytes.
+- **Shell guards match file names, not globs.** A shell command that reaches `approval.json` or `workflow-state.json` through a wildcard (`approval.js?n`) is not recognized; such commands are not allow-listed, so Claude Code still asks the human.
+- **Reading the output folder with a redirect is denied before approval** (`ls runs/<id>/output 2>/dev/null`): the guard treats `>` as a write. The folder is empty until the plan is approved.
+- **A lock left by a crashed process** is broken after 10 s; if two waiting processes break it in the same moment, both may proceed once.
+
 Workflow architecture, gates and execution rules: [CLAUDE.md](CLAUDE.md).
 
 ## Development
