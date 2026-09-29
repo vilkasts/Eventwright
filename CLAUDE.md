@@ -2,7 +2,76 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-Eventwright is an agentic event-planning workflow for Claude Code: a `/plan-event` coordinator, single-responsibility subagents, quality gates with targeted retries, deterministic human approval and resumable state. The workflow description and its execution rules are added in a later section. This file currently holds the code rules.
+Eventwright is an agentic event-planning workflow for Claude Code: a `/plan-event` coordinator, single-responsibility subagents, quality gates with targeted retries, deterministic human approval and resumable state.
+
+## Commands
+
+```bash
+npm install                      # once, after clone
+npm run claude                   # start Claude Code with the Open-Meteo MCP (.claude/mcp.json)
+npm test                         # all node:test suites
+node --import tsx --test tests/lib/next-action.test.ts   # a single test file
+npm run typecheck                # tsc --noEmit
+npm run lint                     # ESLint (layer rules, no classes/enum/as/default export)
+npm run format                   # Prettier (run before every commit)
+npm run -s wf -- list            # all runs with phase and failure
+npm run -s wf -- status <runId>  # agents, gates and execution plan of a run
+npm run -s wf -- next <runId>    # the next action as JSON (what the coordinator does next)
+```
+
+## Workflow architecture
+
+Hub-and-spoke: the coordinator is the main Claude Code session running a slash command; it follows skill `workflow-orchestration`, asks the CLI what to do next and launches subagents. It never writes event content.
+
+| Component      | Where                                                                      | Role                                                                                                                                              |
+| -------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Slash commands | `.claude/commands/{plan-event,resume-event,approve-event,reject-event}.md` | Coordinator entry points; approve/reject are human-only (`disable-model-invocation`)                                                              |
+| 10 subagents   | `.claude/agents/*.md`                                                      | One responsibility and one artifact each (see `src/config/dag.ts`)                                                                                |
+| 5 skills       | `.claude/skills/*/SKILL.md`                                                | `workflow-orchestration`, `artifact-validator`, `web-research`, `weather-lookup`, `event-html-theme`                                              |
+| 5 hooks        | `src/hooks/*.ts`, registered in `.claude/settings.json`                    | PreToolUse: `state-integrity-guard`, `approval-gate-guard`, `no-leak-guard`; PostToolUse: `post-write-state`; UserPromptSubmit: `record-approval` |
+| MCP            | `.claude/mcp.json` → `open-meteo-mcp-server`                               | Weather (geocoding, forecast, archive) for `weather-analyst` and `validator`                                                                      |
+| Workflow CLI   | `src/cli/main.ts` (`npm run -s wf -- …`)                                   | The only way the coordinator changes state; `next` computes the next step                                                                         |
+| Workflow graph | `src/config/dag.ts`                                                        | Agents, dependencies, artifacts, sections, required lines, gates and owners                                                                       |
+| Runs           | `runs/<runId>/`                                                            | `input.md`, `clarifications.md`, `artifacts/`, `workflow-state.json`, `approval.json`, `output/`                                                  |
+
+Execution order (groups run one after another; agents inside a group run in parallel):
+
+```
+[requirements-formalizer] → clarify (human confirms requirements) → execution plan (wf plan: - Services:)
+→ [weather-analyst] → [venue-scout] → [catering-planner ∥ entertainment-planner ∥ logistics-planner — only selected]
+→ [budget-aggregator] → validate domain (G1–G9) → [event-plan-builder] → validate final (G10–G12)
+→ human approval (/approve-event | /reject-event) → [html-builder] → output/event-plan.{md,html}
+```
+
+| Gate                               | Stage  | Owners                                                                  |
+| ---------------------------------- | ------ | ----------------------------------------------------------------------- |
+| G1-requirements-complete           | domain | requirements-formalizer                                                 |
+| G2-sources-cited                   | domain | venue-scout, catering-planner, entertainment-planner, logistics-planner |
+| G3-weather-grounded                | domain | weather-analyst                                                         |
+| G4-venue-fit                       | domain | venue-scout                                                             |
+| G5-dietary-coverage                | domain | catering-planner                                                        |
+| G6-weather-plan-b                  | domain | venue-scout, entertainment-planner, logistics-planner                   |
+| G7-budget-within-limit             | domain | the four planners + budget-aggregator                                   |
+| G8-currency-consistent             | domain | the four planners + budget-aggregator                                   |
+| G9-must-haves-covered              | domain | the four planners                                                       |
+| G10-plan-covers-requirements       | final  | event-plan-builder                                                      |
+| G11-plan-consistent-with-artifacts | final  | event-plan-builder                                                      |
+| G12-timeline-feasible              | final  | event-plan-builder                                                      |
+
+A gate whose owners are all skipped by the execution plan is `n/a`: the validator does not check it and `record-gates` does not require its row (e.g. G5 without catering). Skipped agents are removed from the owners of other gates.
+
+## Execution rules (invariants)
+
+1. The coordinator never writes content; only `wf next` decides the next step.
+2. Agents of one group are launched in a single message.
+3. `check` after every group; the next group starts only after its inputs pass.
+4. `workflow-state.json` and `approval.json` change only via the CLI and hooks.
+5. Approval = a human-typed `/approve-event <runId>` bound to the plan's sha256; any plan change revokes it.
+6. Retry limit 3 consecutive failures per gate / structural check / agent start without an artifact; beyond it the run stops with a report.
+7. Which service planners run is decided by the confirmed `- Services:` line and applied by `wf plan`; skipped agents are never started or invalidated.
+8. After a rejection, the coordinator invalidates upstream owners per the ownership table; downstream regenerates automatically.
+9. Never format or hand-edit `runs/**` (hashes).
+10. Changing `src/config/dag.ts` (agents, sections, requiredLines, gates) requires updating agents, `validator.md` and tests.
 
 ## Code style
 
