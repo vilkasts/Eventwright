@@ -8,7 +8,7 @@ Eventwright is an agentic event-planning workflow for Claude Code: a `/plan-even
 
 ```bash
 npm install                      # once, after clone
-npm run claude                   # start Claude Code with the Open-Meteo MCP (.claude/mcp.json)
+npm run claude                   # start Claude Code with the project MCP servers (.claude/mcp.json)
 npm test                         # all node:test suites
 node --import tsx --test tests/lib/next-action.test.ts   # a single test file
 npm run typecheck                # tsc --noEmit
@@ -27,9 +27,9 @@ Hub-and-spoke: the coordinator is the main Claude Code session running a slash c
 | -------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Slash commands | `.claude/commands/{plan-event,resume-event,approve-event,reject-event}.md` | Coordinator entry points; approve/reject are human-only (`disable-model-invocation`)                                                              |
 | 10 subagents   | `.claude/agents/*.md`                                                      | One responsibility and one artifact each (see `src/config/dag.ts`)                                                                                |
-| 5 skills       | `.claude/skills/*/SKILL.md`                                                | `workflow-orchestration`, `artifact-validator`, `web-research`, `weather-lookup`, `event-html-theme`                                              |
+| 6 skills       | `.claude/skills/*/SKILL.md`                                                | `workflow-orchestration`, `artifact-validator`, `web-research`, `weather-lookup`, `holiday-lookup`, `event-html-theme`                            |
 | 5 hooks        | `src/hooks/*.ts`, registered in `.claude/settings.json`                    | PreToolUse: `state-integrity-guard`, `approval-gate-guard`, `no-leak-guard`; PostToolUse: `post-write-state`; UserPromptSubmit: `record-approval` |
-| MCP            | `.claude/mcp.json` → `open-meteo-mcp-server`                               | Weather (geocoding, forecast, archive) for `weather-analyst` and `validator`                                                                      |
+| MCP (2)        | `.claude/mcp.json` → `open-meteo-mcp-server`, `@pipeworx/mcp-holidays`     | Weather (geocoding, forecast, archive) for `weather-analyst` and `validator`; public holidays (Nager.Date) for `venue-scout` and `validator` (G4) |
 | Workflow CLI   | `src/cli/main.ts` (`npm run -s wf -- …`)                                   | The only way the coordinator changes state; `next` computes the next step                                                                         |
 | Workflow graph | `src/config/dag.ts`                                                        | Agents, dependencies, artifacts, sections, required lines, gates and owners                                                                       |
 | Runs           | `runs/<runId>/`                                                            | `input.md`, `clarifications.md`, `artifacts/`, `workflow-state.json`, `approval.json`, `output/`                                                  |
@@ -156,4 +156,4 @@ tests/
 - Tests: `node:test` + `node:assert/strict`; narrow optional values with `assert.ok(value)` before using them; CLI and hooks are tested as real processes (`tests/support/run-cli.ts`, `tests/support/run-hook.ts`).
 - Run `npm run format` before every commit; the Husky pre-commit hook runs lint, format check, typecheck and tests.
 - Never format or hand-edit `runs/**`: approval is bound to artifact sha256 hashes.
-- **Cloud sessions** (claude.ai/code, `claude --cloud`) clone the repo onto a Linux VM; the `SessionStart` hook in `.claude/settings.json` runs `npm ci` there (only when `CLAUDE_CODE_REMOTE=true`). The Open-Meteo MCP server is not available in the cloud (it is loaded only via `--mcp-config`), so live workflow runs happen locally with `npm run claude`.
+- **Cloud sessions** (claude.ai/code, `claude --cloud`) clone the repo onto a Linux VM; the `SessionStart` hook in `.claude/settings.json` runs `npm ci` there (only when `CLAUDE_CODE_REMOTE=true`). The project MCP servers (Open-Meteo, holidays) are not available in the cloud (they are loaded only via `--mcp-config`), so live workflow runs happen locally with `npm run claude`.

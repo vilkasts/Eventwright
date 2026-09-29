@@ -1,6 +1,6 @@
 # Eventwright
 
-An agentic event-planning workflow for [Claude Code](https://docs.claude.com/en/docs/claude-code). Describe an event in one sentence — Eventwright collects and confirms the requirements, researches weather (Open-Meteo MCP), venues, catering, entertainment and logistics (web search), builds a budget, checks everything with named quality gates, asks for your approval and produces a ready-to-use plan as HTML and Markdown.
+An agentic event-planning workflow for [Claude Code](https://docs.claude.com/en/docs/claude-code). Describe an event in one sentence — Eventwright collects and confirms the requirements, researches weather (Open-Meteo MCP), public holidays around the date (Nager.Date MCP), venues, catering, entertainment and logistics (web search), builds a budget, checks everything with named quality gates, asks for your approval and produces a ready-to-use plan as HTML and Markdown.
 
 ```
 /plan-event 40th birthday dinner in Lisbon on 2027-06-12 for 30 guests. Budget 9000 EUR.
@@ -25,7 +25,7 @@ npm install
 npm run claude
 ```
 
-`npm run claude` starts Claude Code with `--mcp-config=.claude/mcp.json`; all Claude Code settings (hooks, permissions, agents, commands, skills, MCP) live in `.claude/`. Accept the project trust prompt, then check `/mcp` — `open-meteo` should be **connected**.
+`npm run claude` starts Claude Code with `--mcp-config=.claude/mcp.json`; all Claude Code settings (hooks, permissions, agents, commands, skills, MCP) live in `.claude/`. Accept the project trust prompt, then check `/mcp` — `open-meteo` and `holidays` should be **connected**. Both MCP servers are regular npm dependencies started from `node_modules`; nothing is installed globally.
 
 ## Environment and secrets
 
@@ -33,6 +33,7 @@ No secrets are needed:
 
 - Claude Code uses your own Claude login — no API key.
 - The Open-Meteo MCP server uses the free public Open-Meteo API — no key.
+- The holidays MCP server ([@pipeworx/mcp-holidays](https://github.com/pipeworx-io/mcp-holidays)) uses the free public [Nager.Date](https://date.nager.at) API — no key.
 - Web research uses Claude Code's built-in WebSearch/WebFetch.
 
 `.env.example` documents this; `.env*` files are git-ignored.
