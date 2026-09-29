@@ -61,7 +61,7 @@
 - [x] 3.3 CLI: `confirm-requirements`, `plan`, `budget`, `record-gates`, `invalidate`
 - [x] 4.1 Разбор payload hooks + `state-integrity-guard`
 - [x] 4.2 `post-write-state`
-- [ ] 4.3 `record-approval`
+- [x] 4.3 `record-approval`
 - [ ] 4.4 `approval-gate-guard`
 - [ ] 4.5 `no-leak-guard`
 - [ ] 4.6 `.claude/settings.json`
