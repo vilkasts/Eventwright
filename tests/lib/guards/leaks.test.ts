@@ -29,3 +29,7 @@ test("catches holidays MCP tool references", () => {
     "holidays:get_holidays",
   ]);
 });
+
+test("catches run paths written with Windows backslashes", () => {
+  assert.deepEqual(findLeaks("see runs\\2026-09-28-x\\artifacts"), ["runs\\2026-09-28-x"]);
+});

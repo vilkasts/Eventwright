@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { beforeEach, test } from "node:test";
 
+import { MAX_RETRIES } from "@/config/workflow";
 import { recordAgentStarts, startedWithoutWriteIssues } from "@/lib/agent-runs";
 import { createInitialState, recordArtifactWrite } from "@/lib/state";
 import type { WorkflowState } from "@/types/workflow";
@@ -36,4 +37,19 @@ test("a new html-builder round needs both outputs again, not the hashes of the p
 
 test("an agent that was never started is not flagged", () => {
   assert.deepEqual(startedWithoutWriteIssues(state, "weather-analyst"), []);
+});
+
+test("an output agent that writes only part of its outputs each round still reaches the start limit", () => {
+  for (let round = 0; round <= MAX_RETRIES + 1; round += 1) {
+    recordAgentStarts(state, ["html-builder"], NOW);
+    recordArtifactWrite(
+      state,
+      { runId: "run-1", area: "output", fileName: "event-plan.md" },
+      `hash-${round}`,
+      "html-builder",
+      NOW,
+    );
+  }
+  assert.equal(state.agents["html-builder"].status, "running");
+  assert.equal(state.failure?.kind, "agent");
 });

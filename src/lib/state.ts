@@ -88,8 +88,9 @@ const validationStageOf = (location: RunLocation): GatedStage | null => {
 const recordOutputWrite = (state: WorkflowState, fileName: string, hash: string, writer: string, now: string): void => {
   const agent = state.agents[OUTPUT_AGENT];
   agent.outputs[fileName] = hash;
-  agent.startsWithoutArtifact = 0;
+  // Only a complete set of outputs ends the retry count; one file per round must still reach the limit.
   if (outputFiles().every((file) => agent.outputs[file] !== undefined)) {
+    agent.startsWithoutArtifact = 0;
     agent.status = "done";
     agent.updatedAt = now;
   }
