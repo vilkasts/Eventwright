@@ -77,8 +77,8 @@ export const FLOW_COMMANDS: CommandRegistry = {
       throw new Error("usage: invalidate <runId> <agent...> --feedback <text>");
     }
     const agents = names.map(parseAgentName);
-    invalidateAgents(state, agents, feedback, nowIso());
-    saveState(state);
-    printJson({ ok: true, invalidated: agents });
+    const isChanged = invalidateAgents(state, agents, feedback, nowIso());
+    if (isChanged) saveState(state);
+    printJson({ ok: true, invalidated: agents, alreadyInvalidated: !isChanged });
   },
 };

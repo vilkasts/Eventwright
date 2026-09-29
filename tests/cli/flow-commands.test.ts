@@ -47,3 +47,10 @@ test("record-gates needs a known stage and a validator report", () => {
   assert.match(runCli("record-gates", runId, "later").err, /Stage must be one of/);
   assert.match(runCli("record-gates", runId, "domain").err, /validation-domain\.md/);
 });
+
+test("repeating the same invalidate reports that it changed nothing", () => {
+  const runId = initRun("inv-twice");
+  const args = ["invalidate", runId, "requirements-formalizer", "--feedback", "budget", "10000", "EUR"] as const;
+  assert.equal(cliJson(...args).alreadyInvalidated, false);
+  assert.equal(cliJson(...args).alreadyInvalidated, true);
+});

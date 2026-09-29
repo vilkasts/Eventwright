@@ -28,7 +28,7 @@ Web (WebFetch) and MCP calls are only for gates listed in `Recheck gates`. On a 
 - **G6-weather-plan-b:** when verdict ≠ `outdoor-ok`, every outdoor element in 03/05/06 has a plan B.
 - **G7-budget-within-limit:** run `npm run -s wf -- budget <runId>`; PASS only if `withinLimit` is `true`. On FAIL name as few owners as possible: read `## Savings options` in 07 and name the **single** owner whose savings option (or line item) covers the overrun, plus `budget-aggregator`; name more planners only when no single one can cover it. Quote the savings option to apply in the finding.
 - **G8-currency-consistent:** every amount in 03–07 uses the requirements' currency.
-- **G9-must-haves-covered:** every `[MUST]` requirement is satisfied by a concrete item in 03–06.
+- **G9-must-haves-covered:** every `[MUST]` requirement is satisfied by a concrete item in 03–06. Literally: a substitute (e.g. an indoor room for a required terrace) or a PASS "with a caveat" is a FAIL — name the owner whose item should satisfy it.
 - **G10-plan-covers-requirements (final):** every `R-NN` from 01 appears in the plan's "Requirements matrix" with a section reference.
 - **G11-plan-consistent-with-artifacts (final):** names, times, amounts and the weather verdict in 08 equal those in 02–07.
 - **G12-timeline-feasible (final):** run of show fits the venue's hours; every checklist deadline is after `Today` and before the event date.

@@ -82,6 +82,15 @@ describe("invalidateAgents", () => {
     }, /html-builder/);
     assert.equal(state.agents["venue-scout"].feedback, null);
   });
+  test("repeating the same invalidation is a no-op and leaves a running agent alone", () => {
+    markDone(state, DOMAIN_AGENTS);
+    assert.equal(invalidateAgents(state, ["venue-scout"], "Pick the second venue", NOW), true);
+    state.agents["venue-scout"].status = "running";
+    const logSize = state.log.length;
+    assert.equal(invalidateAgents(state, ["venue-scout"], "Pick the second venue", NOW), false);
+    assert.equal(state.agents["venue-scout"].status, "running");
+    assert.equal(state.log.length, logSize);
+  });
   test("feedback is cleared once the agent rewrites its artifact", () => {
     invalidateAgents(state, ["requirements-formalizer"], "Budget is 10000 EUR", NOW);
     write("01-requirements.md", "v2");

@@ -9,7 +9,7 @@
   },
   "scripts": {
     "claude": "claude --mcp-config=.claude/mcp.json",
-    "claude:run": "claude --setting-sources project,local --strict-mcp-config --mcp-config=.claude/mcp.json --model sonnet",
+    "claude:run": "claude --setting-sources project,local --strict-mcp-config --mcp-config=.claude/mcp.json --model sonnet --permission-mode acceptEdits",
     "mcp:weather": "node node_modules/open-meteo-mcp-server/dist/index.js",
     "mcp:holidays": "node node_modules/@pipeworx/mcp-holidays/bin/cli.js",
     "wf": "node --import tsx src/cli/main.ts",

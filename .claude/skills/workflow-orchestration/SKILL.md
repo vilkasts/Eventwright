@@ -83,7 +83,7 @@ The hook already marked the plan builder for revision with the feedback. Decide 
 | transport, parking, decor, rentals, deadlines                                   | `logistics-planner`       |
 | only wording/order/level of detail of the plan                                  | nothing extra             |
 
-If any row matches: `npm run -s wf -- invalidate <runId> <agents…> --feedback <the user's feedback verbatim>`. Downstream artifacts are regenerated automatically. Then continue the main loop.
+If any row matches: `npm run -s wf -- invalidate <runId> <agents…> --feedback <the user's feedback verbatim>`. Downstream artifacts are regenerated automatically. Then continue the main loop. If it answers `"alreadyInvalidated": true`, the same invalidation is already in effect (e.g. the user ran it by hand) — do not repeat it; continue the loop.
 
 ## Failure report (`failed`)
 

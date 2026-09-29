@@ -140,13 +140,18 @@ export const recordArtifactWrite = (
   return true;
 };
 
+// Feedback is cleared when the agent rewrites its artifact, so a kept feedback means the revision is still open.
+const isAlreadyInvalidated = (state: WorkflowState, names: readonly AgentName[], feedback: string): boolean =>
+  names.every((name) => state.agents[name].feedback === feedback && state.agents[name].status !== "done");
+
 // Called by the coordinator after a human rejection when the feedback touches upstream agents.
+// Returns false when the same invalidation is already in effect: a repeat must not reset an agent that is running.
 export const invalidateAgents = (
   state: WorkflowState,
   names: readonly AgentName[],
   feedback: string,
   now: string,
-): void => {
+): boolean => {
   for (const name of names) {
     if (artifactOf(name) === null) throw new Error(`${name} does not own an artifact and cannot be invalidated.`);
     if (state.agents[name].status === "skipped") {
@@ -155,6 +160,7 @@ export const invalidateAgents = (
       );
     }
   }
+  if (isAlreadyInvalidated(state, names, feedback)) return false;
   for (const name of names) {
     const agent = state.agents[name];
     if (agent.status !== "pending") agent.status = "stale";
@@ -165,6 +171,7 @@ export const invalidateAgents = (
   markStale(state, downstream, () => "an upstream artifact is being revised — regenerate");
   resetPassedGates(state, [...names, ...downstream]);
   appendLog(state, "invalidated", { agents: names, feedback }, now);
+  return true;
 };
 
 export const confirmRequirements = (state: WorkflowState, now: string): void => {
