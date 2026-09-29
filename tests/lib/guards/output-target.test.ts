@@ -17,6 +17,23 @@ test("finds the run of a shell write into output", () => {
   assert.equal(target({ tool_name: "Bash", tool_input: { command: "echo x > runs/r2/output/event-plan.md" } }), "r2");
 });
 
+test("read-only shell commands on output are not treated as writes", () => {
+  assert.equal(target({ tool_name: "Bash", tool_input: { command: "cat runs/r2/output/event-plan.md" } }), null);
+  assert.equal(target({ tool_name: "Bash", tool_input: { command: 'grep "^## " runs/*/output/event-plan.md' } }), null);
+  assert.equal(
+    target({ tool_name: "PowerShell", tool_input: { command: "Get-Content runs\\r2\\output\\event-plan.md" } }),
+    null,
+  );
+});
+
+test("shell commands that copy or write into output are still caught", () => {
+  assert.equal(target({ tool_name: "Bash", tool_input: { command: "cp plan.md runs/r3/output/event-plan.md" } }), "r3");
+  assert.equal(
+    target({ tool_name: "PowerShell", tool_input: { command: "Set-Content runs\\r4\\output\\event-plan.html x" } }),
+    "r4",
+  );
+});
+
 test("ignores artifacts and other tools", () => {
   assert.equal(
     target({ tool_name: "Write", tool_input: { file_path: "/p/runs/r1/artifacts/08-event-plan.md" } }),

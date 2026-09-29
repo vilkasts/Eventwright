@@ -110,6 +110,12 @@ Four saved runs with inputs, artifacts, validator reports, state and approvals a
 - Quality gates name the responsible agents; only they and their downstream re-run (at most 3 consecutive failures).
 - Hooks keep state and approval tamper-proof and keep workflow internals out of the final document.
 
+### Design notes
+
+**Two levels of gates.** Every artifact passes a deterministic structure gate (`npm run -s wf -- check`: required sections and lines, citations, no placeholders, rewritten since the agent started) **before the next group starts** — a group never builds on a malformed or unwritten input. The domain gates G1–G9 need the whole picture (the budget gate compares the sum of all planners with the limit; the venue gate needs the weather verdict and the guest list), so the validator checks them once all domain artifacts exist, and G10–G12 once the plan exists. A failing gate re-runs only its owners and their downstream.
+
+**Why deterministic checks and JSON state.** Artifacts are plain Markdown for people and agents. What must not depend on a model's judgment is decided by code: the next step, retry limits, the budget arithmetic of G7, the structure of each artifact and the approval bound to the plan's sha256. In the demo runs this caught real failures that a model had reported as done — an artifact written through a shell script instead of the Write tool, and claims that were not on the cited page — and kept the workflow resumable after an interrupted session.
+
 Workflow architecture, gates and execution rules: [CLAUDE.md](CLAUDE.md).
 
 ## Development

@@ -44,6 +44,10 @@ Web (WebFetch) and MCP calls are only for gates listed in `Recheck gates`. On a 
 - Agent: validator
 - Stage: <stage>
 
+## Summary
+
+<one or two sentences: how many gates passed, which failed or are blocked>
+
 ## Gate results
 
 | Gate | Status | Owners | Finding |
@@ -53,7 +57,17 @@ Web (WebFetch) and MCP calls are only for gates listed in `Recheck gates`. On a 
 
 ## Details
 
-<for each FAIL: quotes from the artifacts and a precise fix instruction>
+<for each FAIL: quotes from the artifacts and a precise fix instruction; "None" when every gate passed>
+
+## Sources
+
+- <each URL opened with WebFetch, each MCP call re-run (e.g. open-meteo:weather_archive — lat, lon, period), and `npm run -s wf -- budget` for G7>
+
+## Open questions
+
+None
 ```
+
+The report uses the same frame as every other artifact (skill `artifact-validator`: Meta, Summary, …, Sources, Open questions); its own sections are `Gate results` and `Details`.
 
 The table has **one row for every gate of the stage except those listed under `Not applicable`** (domain: G1–G9, final: G10–G12). Gates not in `Recheck gates` already passed: report `PASS` from the artifacts alone, without web or MCP calls, unless you see a clear regression. Status is exactly `PASS` or `FAIL`. Write the report **only with the Write tool** (never via Bash, Python or shell redirects — such writes are not recorded). Reply: `DONE validation-<stage>.md`.
