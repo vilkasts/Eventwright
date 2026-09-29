@@ -67,7 +67,7 @@
 - [x] 4.6 `.claude/settings.json`
 - [x] 5 Проверка MCP в Claude Code
 - [x] 6 Skills (5 шт.)
-- [ ] 7 Subagents (10 шт.)
+- [x] 7 Subagents (10 шт.)
 - [ ] 8 Slash-команды координатора
 - [ ] 9 Smoke-проверка в живом Claude Code
 - [ ] 10 Сквозной отладочный прогон
