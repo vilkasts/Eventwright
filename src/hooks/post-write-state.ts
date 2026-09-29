@@ -1,7 +1,7 @@
 // PostToolUse: every artifact write is recorded in workflow-state.json (status, sha256, downstream invalidation).
 import { nowIso } from "@/io/clock";
 import { sha256OfFile } from "@/io/files";
-import { readHookInput } from "@/io/hook-io";
+import { readHookInput, runHookSafely } from "@/io/hook-io";
 import { stateExists, updateState } from "@/io/state-store";
 import { parseRunPath } from "@/lib/run-path";
 import { recordArtifactWrite } from "@/lib/state";
@@ -22,4 +22,4 @@ const recordWrite = async (): Promise<void> => {
   }));
 };
 
-await recordWrite();
+await runHookSafely("post-write-state", recordWrite);

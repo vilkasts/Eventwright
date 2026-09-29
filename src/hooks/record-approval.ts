@@ -3,7 +3,7 @@
 import { HASH_PREVIEW_LENGTH } from "@/config/workflow";
 import { recordDecision } from "@/io/approval-store";
 import { nowIso } from "@/io/clock";
-import { blockPrompt, readHookInput, reportToContext } from "@/io/hook-io";
+import { blockPrompt, readHookInput, reportToContext, runHookSafely } from "@/io/hook-io";
 import { stateExists } from "@/io/state-store";
 import { parseApprovalCommand } from "@/lib/approval-command";
 import type { DecisionRequest } from "@/types/approval";
@@ -35,4 +35,4 @@ const recordApproval = async (): Promise<void> => {
   }
 };
 
-await recordApproval();
+await runHookSafely(SOURCE, recordApproval);

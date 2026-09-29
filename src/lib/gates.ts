@@ -57,6 +57,24 @@ const retryAffectedAgents = (state: WorkflowState, findingsByOwner: Map<AgentNam
   );
 };
 
+// A report counts only if the validator wrote it after the gates were reset (post-write-state stored its
+// hash) and it was not recorded yet: an old all-PASS report must never pass an unvalidated plan.
+export const staleReportIssue = (
+  state: WorkflowState,
+  stage: GatedStage,
+  reportSha256: string | null,
+): string | null => {
+  const report = state.validation[stage];
+  if (report === null) {
+    return `The ${stage} validator report was not written by the validator since the gates were reset — relaunch the validator.`;
+  }
+  if (report.recorded) return `The ${stage} validator report was already recorded — relaunch the validator.`;
+  if (report.sha256 !== reportSha256) {
+    return `The ${stage} validator report changed after the validator wrote it — relaunch the validator.`;
+  }
+  return null;
+};
+
 export const recordGates = (state: WorkflowState, stage: GatedStage, reportText: string, now: string): GateSummary => {
   const rows = parseGateTable(reportText);
   const expected = requireRows(state, stage, rows);

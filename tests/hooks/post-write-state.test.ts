@@ -41,6 +41,15 @@ test("concurrent writes of one parallel group are all recorded (no lost updates)
   }
 });
 
+test("reports a corrupt state file to Claude instead of failing silently (F04)", () => {
+  writeFileSync(statePath(RUN), "{ not json");
+  const file = artifactPath(RUN, "02-weather-outlook.md");
+  writeFileSync(file, "# Weather\n");
+  const result = runHook("post-write-state", { tool_name: "Write", tool_input: { file_path: file } });
+  assert.equal(result.code, 2);
+  assert.match(result.stderr, /post-write-state/);
+});
+
 test("ignores files outside a run and runs without state", () => {
   const before = readFileSync(statePath(RUN), "utf8");
   const outside = path.join(projectDirectory(), "README.md");

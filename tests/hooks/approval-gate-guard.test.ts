@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { writeFileSync } from "node:fs";
 import { beforeEach, test } from "node:test";
 
-import { artifactPath } from "@/io/paths";
+import { approvalPath, artifactPath } from "@/io/paths";
 import { outputPath, prepareAwaitingApproval, RUN, runHook, setupRun, writePayload } from "@tests/support/run-hook";
 
 const guard = (payload: unknown): string | null => runHook("approval-gate-guard", payload).decision;
@@ -28,6 +28,13 @@ test("an edit of the plan after approval blocks output again", () => {
   approve();
   writeFileSync(artifactPath(RUN, "08-event-plan.md"), "# Event plan v2\n");
   assert.equal(guard(writePayload(outputPath("event-plan.md"), "x")), "deny");
+});
+
+test("fails closed: a corrupt approval file denies the output write (F04)", () => {
+  writeFileSync(approvalPath(RUN), "{ not json");
+  const result = runHook("approval-gate-guard", writePayload(outputPath("event-plan.html"), "<html>"));
+  assert.equal(result.decision, "deny");
+  assert.match(result.stdout, /approval-gate-guard: the check failed/);
 });
 
 test("blocks shell writes into output", () => {

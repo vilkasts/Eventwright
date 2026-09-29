@@ -42,6 +42,15 @@ test("budget reports a missing budget artifact without failing", () => {
   assert.match(result.out, /"withinLimit": false/);
 });
 
+test("record-gates refuses a report the validator did not write since the gates were reset", () => {
+  const runId = initRun("stale-report");
+  writeArtifact(runId, "validation-domain.md", "| G1-requirements-complete | PASS | requirements-formalizer | — |");
+  const result = runCli("record-gates", runId, "domain");
+  assert.equal(result.code, 1);
+  assert.match(result.err, /relaunch the validator/);
+  assert.equal(readRunState(runId).gates["G1-requirements-complete"].status, "pending");
+});
+
 test("record-gates needs a known stage and a validator report", () => {
   const runId = initRun("no-report");
   assert.match(runCli("record-gates", runId, "later").err, /Stage must be one of/);

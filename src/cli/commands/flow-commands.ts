@@ -2,13 +2,13 @@ import type { CommandRegistry } from "@/cli/command";
 import { requireRun, updateRun } from "@/cli/require-run";
 import { BUDGET_AGENT, REQUIREMENTS_AGENT, STAGE_ORDER, validationFileName } from "@/config/workflow";
 import { nowIso } from "@/io/clock";
-import { fileExists, readText, readTextIfExists } from "@/io/files";
+import { fileExists, readText, readTextIfExists, sha256OfFile } from "@/io/files";
 import { printJson } from "@/io/output";
 import { artifactPath } from "@/io/paths";
 import { budgetStatus } from "@/lib/budget";
 import { parseAgentName, requireArtifactOf } from "@/lib/dag-queries";
 import { applyExecutionPlan, parseServices } from "@/lib/execution-plan";
-import { recordGates } from "@/lib/gates";
+import { recordGates, staleReportIssue } from "@/lib/gates";
 import { confirmRequirements, invalidateAgents } from "@/lib/state";
 import type { GatedStage } from "@/types/workflow";
 
@@ -57,6 +57,8 @@ export const FLOW_COMMANDS: CommandRegistry = {
     const summary = updateRun(runId, (state) => {
       const reportFile = artifactPath(state.runId, validationFileName(stage));
       if (!fileExists(reportFile)) throw new Error(`No ${validationFileName(stage)} — run the validator first.`);
+      const issue = staleReportIssue(state, stage, sha256OfFile(reportFile));
+      if (issue !== null) throw new Error(issue);
       return { isChanged: true, result: recordGates(state, stage, readText(reportFile), nowIso()) };
     });
     printJson(summary);

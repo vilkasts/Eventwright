@@ -27,3 +27,26 @@ export const blockPrompt = (source: string, message: string): never => {
 export const reportToContext = (source: string, message: string): void => {
   process.stdout.write(`[${source}] ${message}\n`);
 };
+
+const errorMessage = (error: unknown): string => (error instanceof Error ? error.message : String(error));
+
+// PreToolUse guards fail closed: exit code 1 would let Claude Code run the tool, so an error while
+// deciding (corrupt JSON, unreadable file) denies the call and names the cause (F04).
+export const guardToolUse = async (source: string, check: (input: HookInput) => string | null): Promise<void> => {
+  let violation: string | null;
+  try {
+    violation = check(await readHookInput());
+  } catch (error) {
+    violation = `${source}: the check failed (${errorMessage(error)}) — fix the file named in the error, then retry.`;
+  }
+  if (violation !== null) denyToolUse(violation);
+};
+
+// Non-guard hooks: an error is shown to Claude (exit 2 + stderr) instead of being dropped silently.
+export const runHookSafely = async (source: string, body: () => Promise<void>): Promise<void> => {
+  try {
+    await body();
+  } catch (error) {
+    blockPrompt(source, errorMessage(error));
+  }
+};

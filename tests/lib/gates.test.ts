@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { beforeEach, describe, test } from "node:test";
 
 import { MAX_RETRIES } from "@/config/workflow";
-import { parseGateTable, recordGates } from "@/lib/gates";
+import { parseGateTable, recordGates, staleReportIssue } from "@/lib/gates";
 import { createInitialState, recordArtifactWrite } from "@/lib/state";
 import type { WorkflowState } from "@/types/workflow";
 import { gateReport, withoutGateRow } from "@tests/support/gate-fixtures";
@@ -19,6 +19,27 @@ beforeEach(() => {
 describe("parseGateTable", () => {
   test("ignores header rows", () => {
     assert.equal(parseGateTable("| Gate | Status |\n|---|---|\n").size, 0);
+  });
+});
+
+describe("staleReportIssue", () => {
+  const REPORT = { runId: "run-1", area: "artifacts", fileName: "validation-domain.md" } as const;
+
+  test("rejects a report the validator did not write after the gates were reset", () => {
+    assert.match(staleReportIssue(state, "domain", "hash-old") ?? "", /relaunch the validator/);
+  });
+  test("rejects a report that was already recorded", () => {
+    recordArtifactWrite(state, REPORT, "hash-1", "validator", NOW);
+    recordGates(state, "domain", gateReport("domain"), NOW);
+    assert.match(staleReportIssue(state, "domain", "hash-1") ?? "", /already recorded/);
+  });
+  test("rejects a report file that differs from the one the validator wrote", () => {
+    recordArtifactWrite(state, REPORT, "hash-1", "validator", NOW);
+    assert.match(staleReportIssue(state, "domain", "hash-other") ?? "", /changed after the validator wrote it/);
+  });
+  test("accepts the report the validator has just written", () => {
+    recordArtifactWrite(state, REPORT, "hash-1", "validator", NOW);
+    assert.equal(staleReportIssue(state, "domain", "hash-1"), null);
   });
 });
 
