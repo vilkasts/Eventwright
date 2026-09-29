@@ -56,7 +56,7 @@
 - [x] 1.9 Слой io: хранение одобрения
 - [x] 2.1 Структурная проверка артефактов
 - [x] 2.2 Детерминированная проверка бюджета
-- [ ] 3.1 CLI: `init`, `list`, `status`, `next`
+- [x] 3.1 CLI: `init`, `list`, `status`, `next`
 - [ ] 3.2 CLI: `start`, `lint`, `check`
 - [ ] 3.3 CLI: `confirm-requirements`, `plan`, `budget`, `record-gates`, `invalidate`
 - [ ] 4.1 Разбор payload hooks + `state-integrity-guard`
