@@ -36,7 +36,7 @@ No secrets are needed:
 - The holidays MCP server ([@pipeworx/mcp-holidays](https://github.com/pipeworx-io/mcp-holidays)) uses the free public [Nager.Date](https://date.nager.at) API — no key.
 - Web research uses Claude Code's built-in WebSearch/WebFetch.
 
-`.env.example` documents this; `.env*` files are git-ignored.
+There is nothing to configure. `.env*` files are git-ignored, so a local `.env` is never committed.
 
 ## Run
 
@@ -108,7 +108,7 @@ Four saved runs with inputs, artifacts, validator reports, state and approvals a
 - A coordinator (slash command) and 10 single-responsibility subagents, each owning one artifact.
 - The next step is computed by code (`npm run -s wf -- next`) from `src/config/dag.ts` and the saved state, not guessed by the model.
 - Quality gates name the responsible agents; only they and their downstream re-run (at most 3 consecutive failures).
-- Hooks keep state and approval tamper-proof and keep workflow internals out of the final document.
+- Hooks keep state and approval tamper-proof, let only the owning agent write each artifact and keep workflow internals out of the final document.
 
 ### Design notes
 
@@ -139,4 +139,4 @@ npm run format      # Prettier
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+This project has no license. Without one, default copyright applies: all rights are reserved by the author.

@@ -2,6 +2,7 @@
   "name": "eventwright",
   "version": "0.1.0",
   "description": "Agentic event-planning workflow for Claude Code — coordinator + specialist subagents, quality gates, human approval, resumable state.",
+  "license": "UNLICENSED",
   "type": "module",
   "private": true,
   "engines": {

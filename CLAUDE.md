@@ -81,6 +81,7 @@ A gate whose owners are all skipped by the execution plan is `n/a`: the validato
 9. Never format or hand-edit `runs/**` (hashes).
 10. Changing `src/config/dag.ts` (agents, sections, requiredLines, moneyLines, gates) requires updating agents, `validator.md` and tests.
 11. The coordinator runs on Sonnet: the four slash commands and skill `workflow-orchestration` set `model: sonnet` (the override lasts for the current turn, whatever the session model is); subagents set their own `model`. Keep it that way — the coordinator is the longest-lived context and dominates token usage.
+12. Each artifact is written only by its owning agent with the Write tool (`validation-*.md`: `validator`; `output/*`: `html-builder`); `state-integrity-guard` denies any other writer, including the coordinator. `record-gates` accepts only a report the validator wrote after the gates were reset.
 
 ## Code style
 
