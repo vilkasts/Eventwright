@@ -23,6 +23,17 @@ test("an agent that wrote its artifact after the start is accepted", () => {
   assert.deepEqual(startedWithoutWriteIssues(state, "weather-analyst"), []);
 });
 
+test("a new html-builder round needs both outputs again, not the hashes of the previous round (F05)", () => {
+  const output = (fileName: string) => ({ runId: "run-1", area: "output", fileName }) as const;
+  recordArtifactWrite(state, output("event-plan.md"), "m1", "test", NOW);
+  recordArtifactWrite(state, output("event-plan.html"), "h1", "test", NOW);
+  assert.equal(state.agents["html-builder"].status, "done");
+  state.agents["html-builder"].status = "stale";
+  recordAgentStarts(state, ["html-builder"], NOW);
+  recordArtifactWrite(state, output("event-plan.md"), "m2", "test", NOW);
+  assert.notEqual(state.agents["html-builder"].status, "done");
+});
+
 test("an agent that was never started is not flagged", () => {
   assert.deepEqual(startedWithoutWriteIssues(state, "weather-analyst"), []);
 });

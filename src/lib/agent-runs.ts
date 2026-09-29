@@ -21,6 +21,8 @@ export const recordAgentStarts = (state: WorkflowState, names: readonly AgentNam
   for (const name of names) {
     const agent = state.agents[name];
     agent.status = "running";
+    // F05: an output agent is done only when this round wrote every output file.
+    agent.outputs = {};
     agent.attempts += 1;
     agent.startsWithoutArtifact += 1;
     if (agent.startsWithoutArtifact <= MAX_RETRIES + 1) continue;
